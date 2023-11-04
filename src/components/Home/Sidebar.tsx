@@ -22,7 +22,7 @@ const SideMenu: React.FC = () => {
     const prompt = event.target.value;
     setPrompt(prompt);
     setImageGallery((prev) => ({ ...prev, prompt }));
-  }
+  };
 
   const onNPromptChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const negative_prompt = event.target.value;
@@ -108,7 +108,7 @@ const SideMenu: React.FC = () => {
           <button className="mb-4 text-sm">
             <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center hover:bg-purple-700 transition duration-300">
               <img
-                src="src/assets/logo genia 1.png"
+                src="/assets/logo genia 1.png"
                 alt="Logo"
                 className="w-16 h-16 absolute left-[1.65rem] -mt-2"
               />
@@ -149,7 +149,7 @@ const SideMenu: React.FC = () => {
         <img
           className="mb-4 w-40 h-16"
           alt="Genia App Icon"
-          src="/src/assets/[removal 2.png"
+          src="/assets/[removal 2.png"
         />
 
         <p className="text-xs font-bold font-advent-pro text-white bg-[#878899] rounded-2xl px-3 py-1 ">
@@ -212,10 +212,10 @@ const SideMenu: React.FC = () => {
         {/* Additional Components */}
         {/* Add the rest of your components here, as per your existing code */}
         <button onClick={handleSubmit}>
-          <img alt="" src="/src/assets/Plus Button.svg" />
+          <img alt="" src="/assets/Plus Button.svg" />
           <img
             alt=""
-            src="/src/assets/logo1.png"
+            src="/assets/logo1.png"
             className=" absolute bottom-[5.5rem] left-[13.75rem] w-24 h-24"
           />
           <p className=" text-black text-base tracking-[0.41px] leading-22 font-normal font-inherit -mt-10">
