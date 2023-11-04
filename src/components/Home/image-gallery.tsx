@@ -7,7 +7,7 @@ import './styling_gallery.css'
 
 // Sample array of image URLs and labels; replace with your own list
 const imageData = [
-  { url: "./dist/src/assets/CONTOMPORARY.png", label: "Contemporary" },
+  { url: "./src/assets/CONTOMPORARY.png", label: "Contemporary" },
   { url: "/src/assets/TRADITIONAL.png", label: "Traditional" },
   { url: "/src/assets/HALLOWEEN.png", label: "Halloween" },
   { url: "/src/assets/CHRISMAS.png", label: "Christmas" },
