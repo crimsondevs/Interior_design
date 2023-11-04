@@ -20,7 +20,6 @@
     "clsx": "^2.0.0",
     "jotai": "^2.5.0",
     "lucide-react": "^0.287.0",
-    "node": "^21.1.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
     "react-dom": "^18.2.0",
