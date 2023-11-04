@@ -1,0 +1,34 @@
+.selected {
+    transition: box-shadow 0.3s; /* Smooth transition for the shadow */
+    filter: brightness(1); /* Reset brightness for the selected tile */
+  }
+  
+  .not-selected {
+    filter: brightness(0.5); /* Reduce brightness for non-selected tiles */
+    transition: filter 0.3s; /* Smooth transition for brightness */
+  }
+  
+  .transform-scale {
+    transition: transform 0.3s; /* Smooth transition for scaling */
+  }
+  
+  .scale-105 {
+    transform: scale(1.1); /* Zoom in by 5% for the selected tile */
+  }
+  .card-container {
+    padding-top: 20px;
+    width: 100%;
+    height: 280px; /* Adjust this to your desired card height */
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  
+  .card-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+  }

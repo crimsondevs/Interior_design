@@ -1,0 +1,17 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Logo/Group 3">
+<mask id="mask0_1_277" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="40" height="40">
+<circle id="Ellipse 2" cx="20" cy="20" r="20" fill="black"/>
+</mask>
+<g mask="url(#mask0_1_277)">
+<circle id="Ellipse 3" cx="20" cy="20" r="20" fill="url(#paint0_linear_1_277)"/>
+<rect id="&#231;&#187;&#132; 4" x="-5.99414" y="-14" width="62.672" height="62.6306" fill="#EDEDEE"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_1_277" x1="26.3334" y1="-4.47171" x2="7.45285" y2="36.7674" gradientUnits="userSpaceOnUse">
+<stop stop-color="#222022"/>
+<stop offset="1" stop-color="#292929"/>
+</linearGradient>
+</defs>
+</svg>
