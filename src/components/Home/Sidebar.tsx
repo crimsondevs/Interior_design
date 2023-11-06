@@ -125,13 +125,13 @@ const SideMenu: React.FC = () => {
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
               <Folder size={32} color="purple" />
             </div>
-            <p className="text-center mt-2 -ml-2">My LibraryAsk GPT</p>
+            <p className="text-center mt-2 -ml-2">My Library</p>
           </button>
           <button className="mb-4 text-sm text-center">
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
               <MessageCircle size={32} color="purple" />
             </div>
-            <p className="text-center mt-2 -ml-2"></p>
+            <p className="text-center mt-2 -ml-2">Ask gpt</p>
           </button>
           <button className="mb-4 text-sm text-center">
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
