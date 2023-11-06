@@ -10,7 +10,7 @@ const imageData = [
   { url: "/assets/contemporary.png", label: "Contemporary" },
   { url: "/assets/TRADITIONAL.png", label: "Traditional" },
   { url: "/assets/HALLOWEEN.png", label: "Halloween" },
-  { url: "/assets/CHRISMAS.png", label: "Christmas" },
+  { url: "/assets/chrismas_shadow.png", label: "Christmas" },
   { url: "/assets/NEOCLASSIC.png", label: "Neo-Classical" },
   { url: "/assets/SCANDINAVIAN.png", label: "Scandanavian" },
   { url: "/assets/INDUSTRIAL.png", label: "Industrial" },
