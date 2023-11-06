@@ -216,7 +216,7 @@ const SideMenu: React.FC = () => {
           <img
             alt=""
             src="/assets/generate icone.webp"
-            className=" absolute bottom-[5.5rem] left-[13.75rem] w-36 h-36"
+            className=" absolute bottom-[5.5rem] left-[17rem] w-36 h-36"
           />
             </div>
         </button>
