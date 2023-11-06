@@ -212,6 +212,7 @@ const SideMenu: React.FC = () => {
         {/* Additional Components */}
         {/* Add the rest of your components here, as per your existing code */}
         <button onClick={handleSubmit}>
+          <div className="flex justify-center items-center">
           <img
             alt=""
             src="/assets/generate icone.webp"
@@ -220,6 +221,7 @@ const SideMenu: React.FC = () => {
           <p className=" text-black text-base tracking-[0.41px] leading-22 font-normal font-inherit -mt-10">
             AI Generate
           </p>
+            </div>
         </button>
       </div>
     </div>
