@@ -45,11 +45,11 @@ function CardSlider() {
   };
 
   return (
-    <div className="w-[95rem] h-[25rem] overflow-hidden">
+    <div className="w-[95rem] h-[20rem] overflow-hidden">
       <h1 className="text-3xl font-medium mb-3 text-center">Select Category</h1>
       <Slider {...settings}>
         {cards.map((card, index) => (
-          <div key={index} className="px-5 card-container">
+          <div key={index} className="px-6 card-container">
             <div
               className={`relative cursor-pointer overflow-hidden transform transform-scale ${
                 selectedCard === index
