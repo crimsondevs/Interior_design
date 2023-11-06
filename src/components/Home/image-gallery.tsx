@@ -50,7 +50,7 @@ const ImageGallery: React.FC = () => {
       <h2 className="text-xl text-center ml-6 font-bold text-gray-800 mt-6">Choose Design Style</h2>
       <div className="flex flex-wrap mt-12 px-4">
         {imageData.map((image, index) => (
-          <div key={index} className="w-[15vw] p-2">
+          <div key={index} className="w-[15vw] p-4">
             <div
               className={`relative cursor-pointer ${selectedImage === index ? 'selected' : 'not-selected'}`}
               onClick={() => handleClick(index)}
