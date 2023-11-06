@@ -215,7 +215,7 @@ const SideMenu: React.FC = () => {
           <img alt="" src="/assets/Plus Button.svg" />
           <img
             alt=""
-            src="/assets/logo1.png"
+            src="/assets/generate icone.webp"
             className=" absolute bottom-[5.5rem] left-[13.75rem] w-24 h-24"
           />
           <p className=" text-black text-base tracking-[0.41px] leading-22 font-normal font-inherit -mt-10">
