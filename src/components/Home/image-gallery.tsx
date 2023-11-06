@@ -51,9 +51,7 @@ const ImageGallery: React.FC = () => {
 
   return (
     <div> {/* Add padding to the left side */}
-      <div className="display: flex; justify-content: center; align-items: center; height: 100vh;">
-          <h2 className="text-xl text-center mr-6 font-bold text-gray-800 mt-6">Choose Design Style</h2>
-        </div>
+      <h2 className="text-center text-xl mr-6 font-bold text-gray-800 mt-6" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '78vw', height: '1vh' }}>Choose Design Style</h2>
       <div className="flex flex-wrap w-[80vw] mt-12 gap-2" style={{ paddingLeft: leftPadding }}>
         {imageData.map((image, index) => (
           <div
