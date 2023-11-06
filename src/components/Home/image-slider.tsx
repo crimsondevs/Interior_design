@@ -12,8 +12,8 @@ function CardSlider() {
     dots: true,
     infinite: true,
     speed: 800,
-    slidesToShow: 3,
-    slidesToScroll: 3,
+    slidesToShow: 4,
+    slidesToScroll: 2,
   };
 
   const cards = [
