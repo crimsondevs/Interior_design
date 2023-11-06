@@ -212,7 +212,6 @@ const SideMenu: React.FC = () => {
         {/* Additional Components */}
         {/* Add the rest of your components here, as per your existing code */}
         <button onClick={handleSubmit}>
-          <img alt="" src="/assets/Plus Button.svg" />
           <img
             alt=""
             src="/assets/generate icone.webp"
