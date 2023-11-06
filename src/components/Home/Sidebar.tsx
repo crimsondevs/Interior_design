@@ -113,7 +113,7 @@ const SideMenu: React.FC = () => {
                 className="w-16 h-16 absolute left-[1.65rem] -mt-2"
               />
             </div>
-            <p className="text-center mt-2 -ml-2">Create</p>
+            <p className="text-center text-black mt-2 -ml-2">Create</p>
           </button>
           <button className="mb-4 text-sm text-center">
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
