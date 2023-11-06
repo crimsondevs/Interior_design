@@ -119,19 +119,19 @@ const SideMenu: React.FC = () => {
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
               <HeartIcon size={32} color="purple" />
             </div>
-            <p className="text-center mt-2 -ml-5">My Favorites</p>
+            <p className="text-center text-black mt-2 -ml-5">My Favorites</p>
           </button>
           <button className="mb-4 text-sm text-center">
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
               <Folder size={32} color="purple" />
             </div>
-            <p className="text-center mt-2 -ml-2">My Library</p>
+            <p className="text-center text-black mt-2 -ml-2">My Library</p>
           </button>
           <button className="mb-4 text-sm text-center">
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
               <MessageCircle size={32} color="purple" />
             </div>
-            <p className="text-center mt-2 -ml-2">Ask gpt</p>
+            <p className="text-center text-black mt-2 -ml-2">Ask gpt</p>
           </button>
           <button className="mb-4 text-sm text-center">
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
@@ -216,11 +216,8 @@ const SideMenu: React.FC = () => {
           <img
             alt=""
             src="/assets/generate icone.webp"
-            className=" absolute bottom-[5.5rem] left-[13.75rem] w-24 h-24"
+            className=" absolute bottom-[5.5rem] left-[13.75rem] w-36 h-36"
           />
-          <p className=" text-black text-base tracking-[0.41px] leading-22 font-normal font-inherit -mt-10">
-            AI Generate
-          </p>
             </div>
         </button>
       </div>
