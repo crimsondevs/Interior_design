@@ -46,7 +46,9 @@ function CardSlider() {
 
   return (
     <div className="w-[95rem] h-[20rem] overflow-hidden">
-      <h1 className="text-3xl font-medium mb-3 text-center">Select Category</h1>
+      <div className="display: flex; justify-content: center; align-items: center; height: 100vw;">
+           <h1 className="text-3xl font-medium mb-3 text-center">Select Category</h1>
+      </div>
       <Slider {...settings}>
         {cards.map((card, index) => (
           <div key={index} className="px-6 card-container">
