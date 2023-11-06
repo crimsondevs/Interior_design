@@ -45,25 +45,28 @@ const ImageGallery: React.FC = () => {
     setSelectedImage(index);
     setImageGallery((prev) => ({ ...prev, designStyle: imageData[index].label }));
   }
+
+  // Define the left padding value you want (e.g., 20px)
+  const leftPadding = "80px";
+
   return (
-    <div>
-      <h2 className="text-xl text-center ml-6 font-bold text-gray-800 mt-6">Choose Design Style</h2>
-      <div className="flex flex-wrap mt-12 px-4">
+    <div> {/* Add padding to the left side */}
+      <h2 className="text-xl text-center mr-6 font-bold text-gray-800 mt-6">Choose Design Style</h2>
+      <div className="flex flex-wrap w-[80vw] mt-12 gap-2" style={{ paddingLeft: leftPadding }}>
         {imageData.map((image, index) => (
-          <div key={index} className="w-[15vw] p-4">
-            <div
-              className={`relative cursor-pointer ${selectedImage === index ? 'selected' : 'not-selected'}`}
-              onClick={() => handleClick(index)}
-            >
-              <div className="aspect-w-1 aspect-h-1"> {/* Aspect ratio container */}
-                <img
-                  src={image.url}
-                  alt={image.label}
-                  className={`rounded object-cover w-full h-full transition-transform transform-scale ${
-                    selectedImage === index ? 'scale-105' : 'scale-100'
-                  }`}
-                />
-              </div>
+          <div
+            className={`relative cursor-pointer ${selectedImage === index ? 'selected' : 'not-selected'}`}
+            onClick={() => handleClick(index)}
+            key={index}
+          >
+            <div className="aspect-w-1 aspect-h-1"> {/* Aspect ratio container */}
+              <img
+                src={image.url}
+                alt={image.label}
+                className={`rounded object-cover w-[20rem] h-full transition-transform transform-scale ${
+                  selectedImage === index ? 'scale-105' : 'scale-100'
+                }`}
+              />
             </div>
           </div>
         ))}
