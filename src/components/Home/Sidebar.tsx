@@ -100,10 +100,10 @@ const SideMenu: React.FC = () => {
   };
 
   return (
-    <div className="fixed flex min-h-screen">
+    <div className="flex min-h-screen">
       <Toaster />
       {/* Sidebar */}
-      <div className="flex flex-col w-28 bg-[#ddddde] text-white">
+      <div className=" fixed flex flex-col w-28 bg-[#ddddde] text-white">
         <div className="flex flex-col p-4 mt-24">
           <button className="mb-4 text-sm">
             <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center hover:bg-purple-700 transition duration-300">
@@ -144,7 +144,7 @@ const SideMenu: React.FC = () => {
         </div>
       </div>
       {/* Expanded Area */}
-      <div className="flex flex-col items-center justify-start w-72 bg-[#2C2F48]/10 text-white p-4">
+      <div className="fixed flex flex-col items-center justify-start w-72 bg-[#2C2F48]/10 text-white p-4">
         {/* Genia App Icon */}
         <img
           className="mb-4 w-40 h-16"
