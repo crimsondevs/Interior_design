@@ -46,20 +46,17 @@ const ImageGallery: React.FC = () => {
     setImageGallery((prev) => ({ ...prev, designStyle: imageData[index].label }));
   }
 
-  // Define the left padding value you want (e.g., 20px)
-  const leftPadding = "80px";
-
   return (
-    <div> {/* Add padding to the left side */}
-      <h2 className="text-center text-xl mr-6 font-bold text-gray-800 mt-6" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '78vw', height: '1vh' }}>Choose Design Style</h2>
-      <div className="flex flex-wrap w-[80vw] mt-12 gap-2" style={{ paddingLeft: leftPadding }}>
+    <div style={{ overflowY: 'auto', height: '300px' }}> {/* Set the fixed height and add scroll if needed */}
+      <h2 className="text-center text-xl mr-6 font-bold text-gray-800 mt-6">Choose Design Style</h2>
+      <div className="flex flex-wrap w-[80vw] mt-12 gap-2">
         {imageData.map((image, index) => (
           <div
             className={`relative cursor-pointer ${selectedImage === index ? 'selected' : 'not-selected'}`}
             onClick={() => handleClick(index)}
             key={index}
           >
-            <div className="aspect-w-1 aspect-h-1"> {/* Aspect ratio container */}
+            <div className="aspect-w-1 aspect-h-1">
               <img
                 src={image.url}
                 alt={image.label}
