@@ -103,7 +103,7 @@ const SideMenu: React.FC = () => {
     <div className="flex min-h-screen">
       <Toaster />
       {/* Sidebar */}
-      <div className="flex flex-col w-28 bg-[#ddddde] text-white">
+      <div className="fixed flex flex-col w-28 bg-[#ddddde] text-white">
         <div className="flex flex-col p-4 mt-24">
           <button className="mb-4 text-sm">
             <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center hover:bg-purple-700 transition duration-300">
