@@ -67,7 +67,7 @@ const SideMenu: React.FC = () => {
       console.log(imageGallery);
       axios
         .post(
-          "https://a7dvpapfxmestm-4996.proxy.runpod.net/update-prompt",
+          "https://7u5p5syday3r90-4996.proxy.runpod.net/update-prompt",
           imageGallery
         )
         .then((response) => {
@@ -77,7 +77,7 @@ const SideMenu: React.FC = () => {
           // After successful POST request, make a GET request to fetch the image
           axios
             .get(
-              "https://a7dvpapfxmestm-4996.proxy.runpod.net/get-uploaded-image",
+              "https://7u5p5syday3r90-4996.proxy.runpod.net/get-uploaded-image",
               { responseType: "blob" }
             )
             .then((imageResponse) => {
