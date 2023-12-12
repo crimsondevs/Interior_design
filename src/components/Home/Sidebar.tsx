@@ -67,7 +67,7 @@ const SideMenu: React.FC = () => {
       console.log(imageGallery);
       axios
         .post(
-          "http://83.32.11.161:40007/update-prompt",
+          "https://ssh5.vast.ai:40007/update-prompt",
           imageGallery
         )
         .then((response) => {
@@ -77,7 +77,7 @@ const SideMenu: React.FC = () => {
           // After successful POST request, make a GET request to fetch the image
           axios
             .get(
-              "http://83.32.11.161:40007/get-uploaded-image",
+              "https://ssh5.vast.ai:40007/get-uploaded-image",
               { responseType: "blob" }
             )
             .then((imageResponse) => {
