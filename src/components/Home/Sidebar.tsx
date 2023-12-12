@@ -67,7 +67,7 @@ const SideMenu: React.FC = () => {
       console.log(imageGallery);
       axios
         .post(
-          "https://213.181.123.66:22449/update-prompt",
+          "https://75.63.212.196:6670/update-prompt",
           imageGallery
         )
         .then((response) => {
@@ -77,7 +77,7 @@ const SideMenu: React.FC = () => {
           // After successful POST request, make a GET request to fetch the image
           axios
             .get(
-              "https://213.181.123.66:22449/get-uploaded-image",
+              "https://75.63.212.196:6670/get-uploaded-image",
               { responseType: "blob" }
             )
             .then((imageResponse) => {
