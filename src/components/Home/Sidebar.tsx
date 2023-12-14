@@ -12,6 +12,7 @@ import { useAtom } from "jotai";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
+
 const SideMenu: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
   const [imageGallery, setImageGallery] = useAtom(imageGalleryAtom);
@@ -23,6 +24,8 @@ const SideMenu: React.FC = () => {
     setPrompt(prompt);
     setImageGallery((prev) => ({ ...prev, prompt }));
   };
+
+  const [isGeneratingImage, setIsGeneratingImage] = useState<boolean>(false);
 
   const onNPromptChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const negative_prompt = event.target.value;
@@ -45,16 +48,17 @@ const SideMenu: React.FC = () => {
     }
   };
 
-  const handleImageDownload = (imageUrl: string) => {
-    // Trigger the download when the image is available
-    const downloadLink = document.createElement("a");
-    downloadLink.href = imageUrl;
-    downloadLink.download = "downloaded_image.jpg"; // You can specify the filename here
-    downloadLink.click();
+  const handleImageDownload = (imageUrl) => {
+    const link = document.createElement('a');
+    link.href = imageUrl;
+    link.download = 'generated_image.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleSubmit = () => {
-    // checking if jotai atom is not containing all three values
+    // Validation check
     if (
       !imageGallery.Category ||
       !imageGallery.designStyle ||
@@ -63,40 +67,47 @@ const SideMenu: React.FC = () => {
       !imageGallery.negative_prompt
     ) {
       toast.error("Please Select All Options!");
-    } else {
-      console.log(imageGallery);
-      axios
-        .post(
-          "https://75.63.212.196:6670/update-prompt",
-          imageGallery
-        )
-        .then((response) => {
-          toast.success("Please wait two minutes for the image to download");
-          console.log(response.data);
-
-          // After successful POST request, make a GET request to fetch the image
-          axios
-            .get(
-              "https://75.63.212.196:6670/get-uploaded-image",
-              { responseType: "blob" }
-            )
-            .then((imageResponse) => {
-              // Create a URL for the received image blob
-              const imageUrl = URL.createObjectURL(imageResponse.data);
-
-              // Don't set the image state, so it won't display in the UI
-
-              // Trigger the download when the image is available
-              handleImageDownload(imageUrl);
-            })
-            .catch((error) => {
-              toast.error("Error fetching image: " + error.message);
-            });
-        })
-        .catch((error) => {
-          toast.error("Error while sending data: " + error.message);
-        });
+      return;
     }
+
+    setIsGeneratingImage(true);
+    // Sending POST request
+    axios.post("https://enhotj3vze4uf3-4996.proxy.runpod.net/update-prompt", imageGallery)
+      .then(response => {
+        const requestId = response.data.request_id;
+        pollForImage(requestId);
+      })
+      .catch(error => {
+        toast.error("Error while sending data: " + error.message);
+        setIsGeneratingImage(false); // Reset the flag in case of error
+      });
+  };
+  
+  // Function to poll for the image
+  const pollForImage = (requestId) => {
+    let hasNotified = false; // Flag to track if the notification has been shown
+  
+    const fetchImage = () => {
+      axios.get(`https://enhotj3vze4uf3-4996.proxy.runpod.net/get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
+      .then(imageResponse => {
+        if (imageResponse.status === 200) {
+          const imageUrl = URL.createObjectURL(imageResponse.data);
+          handleImageDownload(imageUrl);
+          setIsGeneratingImage(false); // Reset the flag when image is ready
+        } else if (imageResponse.status === 504) {
+          toast.error("Image generation timed out.");
+          setIsGeneratingImage(false); // Reset the flag in case of timeout
+        } else {
+          // ... (existing code)
+        }
+      })
+      .catch(error => {
+        toast.error("Error fetching image: " + error.message);
+        setIsGeneratingImage(false); // Reset the flag in case of error
+      });
+  };
+  
+    fetchImage();
   };
 
   return (
@@ -155,7 +166,14 @@ const SideMenu: React.FC = () => {
         <p className="text-xs font-bold font-advent-pro text-white bg-[#878899] rounded-2xl px-3 py-1 ">
           STEP 1
         </p>
-
+        {/* Loading Screen or Message */}
+        {isGeneratingImage && (
+          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-gray-700 bg-opacity-50 z-50">
+            <div className="text-white text-3xl font-bold p-4 bg-gradient-to-r from-purple-500 to-pink-500 bg-opacity-60 rounded-md shadow-lg">
+               Generating image, please wait...
+            </div>
+          </div>
+        )}
         <label className="relative bg-gradient-to-r from-purple-400 to-pink-400 text-white rounded-xl mt-4 p-4 cursor-pointer w-48 text-center">
           <input
             type="file"
