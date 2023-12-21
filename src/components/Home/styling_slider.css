@@ -4,7 +4,7 @@
   }
   
   .not-selected {
-    filter: brightness(0.5); /* Reduce brightness for non-selected tiles */
+    filter: brightness(1); /* Reduce brightness for non-selected tiles */
     transition: filter 0.3s; /* Smooth transition for brightness */
   }
   
