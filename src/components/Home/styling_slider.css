@@ -1,6 +1,6 @@
 .selected {
     transition: box-shadow 0.3s; /* Smooth transition for the shadow */
-    filter: brightness(1); /* Reset brightness for the selected tile */
+    filter: brightness(1.4); /* Reset brightness for the selected tile */
   }
   
   .not-selected {
