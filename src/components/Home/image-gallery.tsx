@@ -60,6 +60,7 @@ const ImageGallery: React.FC = () => {
             key={index}
           >
             <div className="aspect-w-1 aspect-h-1"> {/* Aspect ratio container */}
+            
               <img
                 src={image.url}
                 alt={image.label}
@@ -67,6 +68,13 @@ const ImageGallery: React.FC = () => {
                   selectedImage === index ? 'scale-105' : 'scale-100'
                 }`}
               />
+              {selectedImage === index && (
+                <img
+                  src="/assets/tick.png"
+                  alt="Selected"
+                  className="absolute bottom-0 right-0 h-6 mb-[1.75rem] mr-10" // Adjust the position as needed
+                />
+              )}
             </div>
           </div>
         ))}

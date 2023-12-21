@@ -63,6 +63,13 @@ function CardSlider() {
                 alt={card.label}
                 className="w-full h-73 object-cover"
               />
+              {selectedCard === index && (
+                <img
+                  src="/assets/tick.png"
+                  alt="Selected"
+                  className="absolute bottom-0 right-0 h-8 mb-4 mr-6 " // Adjust the position as needed
+                />
+              )}
               <div className="absolute inset-0 bg-opacity-10 flex items-center justify-center">
               </div>
             </div>
