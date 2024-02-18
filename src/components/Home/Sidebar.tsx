@@ -72,7 +72,7 @@ const SideMenu: React.FC = () => {
 
     setIsGeneratingImage(true);
     // Sending POST request
-    axios.post("https://enhotj3vze4uf3-4996.proxy.runpod.net/update-prompt", imageGallery)
+    axios.post("https://zqn30bbya3rcn2-4996.proxy.runpod.net/update-prompt", imageGallery)
       .then(response => {
         const requestId = response.data.request_id;
         pollForImage(requestId);
@@ -88,7 +88,7 @@ const SideMenu: React.FC = () => {
     let hasNotified = false; // Flag to track if the notification has been shown
   
     const fetchImage = () => {
-      axios.get(`https://enhotj3vze4uf3-4996.proxy.runpod.net/get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
+      axios.get(`https://zqn30bbya3rcn2-4996.proxy.runpod.net/get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
       .then(imageResponse => {
         if (imageResponse.status === 200) {
           const imageUrl = URL.createObjectURL(imageResponse.data);
