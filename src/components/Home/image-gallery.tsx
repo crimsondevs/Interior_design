@@ -40,42 +40,37 @@ const imageData = [
 const ImageGallery: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [, setImageGallery] = useAtom(imageGalleryAtom);
-
+  
   const handleClick = (index: number) => {
     setSelectedImage(index);
     setImageGallery((prev) => ({ ...prev, designStyle: imageData[index].label }));
-  }
+  };
 
-  // Define the left padding value you want (e.g., 20px)
-  const leftPadding = "80px";
+  // Responsive adjustments can be made directly in CSS for most cases
+  // You might want to use JavaScript for more complex responsiveness that CSS can't handle
 
   return (
-    <div> {/* Add padding to the left side */}
-      <h2 className="text-center text-xl mr-6 font-bold text-gray-800 mt-6" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '78vw', height: '1vh' }}>Choose Design Style</h2>
-      <div className="flex flex-wrap w-[80vw] mt-6 gap-2" style={{ paddingLeft: leftPadding, overflowY: 'auto', height: '55vh' }}>
+    <div className="gallery-container"> {/* Use responsive classes or styles here */}
+      <h2 className="title-style">Choose Design Style</h2>
+      <div className="images-wrapper">
         {imageData.map((image, index) => (
           <div
-            className={`relative cursor-pointer ${selectedImage === index ? 'selected' : 'not-selected'}`}
+            className={`image-container ${selectedImage === index ? 'selected' : ''}`}
             onClick={() => handleClick(index)}
             key={index}
           >
-            <div className="aspect-w-1 aspect-h-1"> {/* Aspect ratio container */}
-            
+            <img
+              src={image.url}
+              alt={image.label}
+              className={`image-style ${selectedImage === index ? 'image-selected' : ''}`}
+            />
+            {selectedImage === index && (
               <img
-                src={image.url}
-                alt={image.label}
-                className={`rounded object-cover w-[20rem] h-full transition-transform transform-scale ${
-                  selectedImage === index ? 'scale-105' : 'scale-100'
-                }`}
+                src="/assets/tick.png"
+                alt="Selected"
+                className="tick-icon"
               />
-              {selectedImage === index && (
-                <img
-                  src="/assets/tick.png"
-                  alt="Selected"
-                  className="absolute bottom-0 right-0 h-6 mb-[1.75rem] mr-10" // Adjust the position as needed
-                />
-              )}
-            </div>
+            )}
           </div>
         ))}
       </div>
