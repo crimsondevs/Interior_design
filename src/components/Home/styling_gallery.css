@@ -1,17 +1,76 @@
+/* Base styles */
 .selected {
-    transition: box-shadow 0.3s; /* Smooth transition for the shadow */
-    filter: brightness(1); /* Reset brightness for the selected tile */
+  transition: box-shadow 0.3s; /* Smooth transition for the shadow */
+  filter: brightness(1); /* Reset brightness for the selected tile */
+}
+
+.not-selected {
+  filter: brightness(0.8); /* Reduce brightness for non-selected tiles */
+  transition: filter 0.3s; /* Smooth transition for brightness */
+}
+
+.transform-scale {
+  transition: transform 0.3s; /* Smooth transition for scaling */
+}
+
+.scale-105 {
+  transform: scale(1.05); /* Zoom in by 5% for the selected tile */
+}
+.gallery-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80vw; /* Adjusted to use the full width */
+  padding: 10px;
+}
+
+.title-style {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.images-wrapper {
+  height: 50vh;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Adjust gap as needed */
+  justify-content: center;
+  overflow-y: auto;
+  max-width: 80%;
+  padding-bottom: 20px;
+}
+
+.image-container {
+  width: calc(25% - 25px); /* Adjust for gap, assuming 10px gap on each side */
+  position: relative;
+  cursor: pointer;
+}
+
+.image-style {
+  width: 100%; /* Make images responsive */
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+.image-selected {
+  transform: scale(1.05);
+}
+
+.tick-icon {
+  position: absolute;
+  bottom: 1.5vw;
+  right: 2vw;
+  width: 2vw; /* Adjust size as needed */
+}
+
+/* Example media query for smaller screens */
+@media (max-width: 50px) {
+  .images-wrapper {
+    justify-content: center;
   }
-  
-  .not-selected {
-    filter: brightness(1); /* Reduce brightness for non-selected tiles */
-    transition: filter 0.3s; /* Smooth transition for brightness */
+  .image-style {
+    width: 50vw; /* Adjust size on smaller screens */
   }
-  
-  .transform-scale {
-    transition: transform 0.3s; /* Smooth transition for scaling */
-  }
-  
-  .scale-105 {
-    transform: scale(1.1); /* Zoom in by 5% for the selected tile */
-  }
+}
+
+
