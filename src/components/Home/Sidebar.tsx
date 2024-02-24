@@ -3,36 +3,40 @@ import {
   Folder,
   HeartIcon,
   MessageCircle,
+  Upload,
   Minus,
   Plus,
-  Upload,
 } from "lucide-react";
 import { imageGalleryAtom } from "@/atom";
 import { useAtom } from "jotai";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import './SideMenu.css'; // Assume styles are defined in this CSS file
 
-
-const SideMenu: React.FC = () => {
+const SideMenu = () => {
   const [image, setImage] = useState<string | null>(null);
   const [imageGallery, setImageGallery] = useAtom(imageGalleryAtom);
   const [prompt, setPrompt] = useState<string>("");
-  const [negative_prompt, setNPrompt] = useState<string>("");
+  const [negativePrompt, setNegativePrompt] = useState<string>("");
+  const [isGeneratingImage, setIsGeneratingImage] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [modalImage, setModalImage] = useState<string>("");
 
+  // Handle prompt changes
   const onPromptChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const prompt = event.target.value;
     setPrompt(prompt);
     setImageGallery((prev) => ({ ...prev, prompt }));
   };
 
-  const [isGeneratingImage, setIsGeneratingImage] = useState<boolean>(false);
-
-  const onNPromptChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const negative_prompt = event.target.value;
-    setNPrompt(negative_prompt);
-    setImageGallery((prev) => ({ ...prev, negative_prompt }));
+  // Handle negative prompt changes
+  const onNegativePromptChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const negativePrompt = event.target.value;
+    setNegativePrompt(negativePrompt);
+    setImageGallery((prev) => ({ ...prev, negative_prompt: negativePrompt }));
   };
 
+  // Handle image upload
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedImage = event.target.files?.[0];
     if (uploadedImage) {
@@ -48,17 +52,8 @@ const SideMenu: React.FC = () => {
     }
   };
 
-  const handleImageDownload = (imageUrl) => {
-    const link = document.createElement('a');
-    link.href = imageUrl;
-    link.download = 'generated_image.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
+  // Submit and generate image
   const handleSubmit = () => {
-    // Validation check
     if (
       !imageGallery.Category ||
       !imageGallery.designStyle ||
@@ -71,7 +66,6 @@ const SideMenu: React.FC = () => {
     }
 
     setIsGeneratingImage(true);
-    // Sending POST request
     axios.post("https://58bzttxwyfejl6-4996.proxy.runpod.net/update-prompt", imageGallery)
       .then(response => {
         const requestId = response.data.request_id;
@@ -79,42 +73,50 @@ const SideMenu: React.FC = () => {
       })
       .catch(error => {
         toast.error("Error while sending data: " + error.message);
-        setIsGeneratingImage(false); // Reset the flag in case of error
+        setIsGeneratingImage(false);
       });
   };
-  
-  // Function to poll for the image
+
+  // Poll for image
   const pollForImage = (requestId) => {
-    let hasNotified = false; // Flag to track if the notification has been shown
-  
-    const fetchImage = () => {
-      axios.get(`https://58bzttxwyfejl6-4996.proxy.runpod.net/get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
+    axios.get(`https://58bzttxwyfejl6-4996.proxy.runpod.net/get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
       .then(imageResponse => {
         if (imageResponse.status === 200) {
           const imageUrl = URL.createObjectURL(imageResponse.data);
-          handleImageDownload(imageUrl);
-          setIsGeneratingImage(false); // Reset the flag when image is ready
+          setIsGeneratingImage(false);
+          setModalImage(imageUrl);
+          setIsModalOpen(true); // Open the modal with the image
         } else if (imageResponse.status === 504) {
           toast.error("Image generation timed out.");
-          setIsGeneratingImage(false); // Reset the flag in case of timeout
-        } else {
-          // ... (existing code)
+          setIsGeneratingImage(false);
         }
       })
       .catch(error => {
         toast.error("Error fetching image: " + error.message);
-        setIsGeneratingImage(false); // Reset the flag in case of error
+        setIsGeneratingImage(false);
       });
   };
-  
-    fetchImage();
+
+  // Download image
+  const handleImageDownload = () => {
+    const link = document.createElement('a');
+    link.href = modalImage;
+    link.download = 'generated_image.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Close modal
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
-    <div className="flex min-h-screen">
+  <div className={`flex min-h-screen ${isModalOpen}`}>
       <Toaster />
       {/* Sidebar */}
-      <div className="flex flex-col w-28 bg-[#ddddde] text-white">
+      <div className="flex flex-col w-24 bg-[#ddddde] text-white">
         <div className="flex flex-col p-4 mt-24">
           <button className="mb-4 text-sm">
             <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center hover:bg-purple-700 transition duration-300">
@@ -124,25 +126,25 @@ const SideMenu: React.FC = () => {
                 className="w-16 h-16 absolute left-[1.65rem] -mt-2"
               />
             </div>
-            <p className="text-center text-black mt-2 -ml-2">Create</p>
+            <p className="text-center text-black mt-2 -ml-1">Create</p>
           </button>
           <button className="mb-4 text-sm text-center">
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
               <HeartIcon size={32} color="purple" />
             </div>
-            <p className="text-center text-black mt-2 -ml-5">My Favorites</p>
+            <p className="text-center text-black mt-2 -ml-1">My Favorites</p>
           </button>
           <button className="mb-4 text-sm text-center">
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
               <Folder size={32} color="purple" />
             </div>
-            <p className="text-center text-black mt-2 -ml-2">My Library</p>
+            <p className="text-center text-black mt-2 -ml-1">My Library</p>
           </button>
           <button className="mb-4 text-sm text-center">
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
               <MessageCircle size={32} color="purple" />
             </div>
-            <p className="text-center text-black mt-2 -ml-2">Ask gpt</p>
+            <p className="text-center text-black mt-2 -ml-1">Ask gpt</p>
           </button>
           <button className="mb-4 text-sm text-center">
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
@@ -222,8 +224,8 @@ const SideMenu: React.FC = () => {
         {/* Text Input Fields */}
         <textarea
           className=" rounded-2xl p-4 text-black border-none outline-none resize-none"
-          value={negative_prompt}
-          onChange={onNPromptChange}
+          value={negativePrompt}
+          onChange={onNegativePromptChange}
           placeholder="Negatif prompts"
         />
 
@@ -234,11 +236,78 @@ const SideMenu: React.FC = () => {
           <img
             alt=""
             src="/assets/generate icone.webp"
-            className=" absolute bottom-[5.5rem] left-[11rem] w-36 h-36"
+            className="bottom-[100px] left-[180px] w-36 h-36"
           />
             </div>
         </button>
       </div>
+      {isModalOpen && (
+  <div style={{
+    position: 'fixed', 
+    top: 0, 
+    left: 0, 
+    width: '100vw', 
+    height: '100vh', 
+    backgroundColor: 'rgba(0, 0, 0, 0.6)', 
+    display: 'flex', 
+    alignItems: 'center', 
+    justifyContent: 'center',
+    zIndex: 1050
+  }}>
+    <div style={{
+      width: '80vw', 
+      height: '80vh', 
+      display: 'flex', 
+      flexDirection: 'column',
+      justifyContent: 'space-between', 
+      alignItems: 'center', // Center align the items vertically
+      paddingBottom: '100px', 
+      boxSizing: 'border-box',
+      borderRadius: '10px',
+      backgroundColor: 'rgba(0, 0, 0, 0.0)', // Ensuring the background is transparent
+    }}>
+      <span style={{
+        alignSelf: 'flex-end', 
+        cursor: 'pointer', 
+        fontSize: '10px'
+      }} onClick={closeModal}>&times;</span>
+      <img src={modalImage} alt="Generated" style={{
+        maxWidth: '100%', 
+        maxHeight: '100%', 
+        objectFit: 'contain',
+        flexGrow: 1
+      }} />
+      <div style={{
+        width: '58vw', // This will match the parent's width, assuming image takes full width
+        display: 'flex', 
+        justifyContent: 'space-around', 
+        backgroundColor: 'magenta', 
+        padding: '10px',
+        borderRadius: '10px', // Curved borders
+        boxSizing: 'border-box',
+        marginTop: '10px', // Add some space between the image and the bar if needed
+      }}>
+        <button style={{
+          backgroundColor: 'white', 
+          border: 'none', 
+          padding: '10px 20px', 
+          cursor: 'pointer',
+          borderRadius: '10px',
+          fontWeight: 'bold' // Make text bold
+        }} onClick={handleImageDownload}>Download</button>
+        <button style={{
+          backgroundColor: 'white', 
+          border: 'none', 
+          padding: '10px 20px',
+          borderRadius: '10px', 
+          cursor: 'pointer',
+          fontWeight: 'bold' // Make text bold
+        }} onClick={closeModal}>Close</button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
