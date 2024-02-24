@@ -48,22 +48,50 @@ const SideMenu: React.FC = () => {
     }
   };
 
-  const [newWindow, setNewWindow] = useState<Window | null>(null);
+const [newWindow, setNewWindow] = useState<Window | null>(null);
 
   const handleImageDownload = (imageUrl) => {
     const blob = new Blob([imageResponse.data], { type: "image/png" });
     const blobUrl = URL.createObjectURL(blob);
 
-    const win = window.open(blobUrl, "_blank"); // Open in a new window
+    const win = window.open(blobUrl, "_blank", "width=400,height=300"); // Set window size and options
     setNewWindow(win); // Store window reference
 
     win.onload = () => {
-      // Add download button/link to the new window
-      const downloadButton = document.createElement("a");
-      downloadButton.href = blobUrl;
-      downloadButton.download = "generated_image.png";
+      // Add download button/link and close button to the new window
+      const downloadButton = document.createElement("button");
+      downloadButton.classList.add(
+        "bg-blue-500",
+        "hover:bg-blue-700",
+        "text-white",
+        "font-bold",
+        "py-2",
+        "px-4",
+        "rounded"
+      );
       downloadButton.innerText = "Download Image";
+      downloadButton.onclick = () => {
+        win.location.href = blobUrl; // Download image directly
+      };
+
+      const closeButton = document.createElement("button");
+      closeButton.classList.add(
+        "bg-red-500",
+        "hover:bg-red-700",
+        "text-white",
+        "font-bold",
+        "py-2",
+        "px-4",
+        "rounded",
+        "ml-4"
+      );
+      closeButton.innerText = "Close";
+      closeButton.onclick = () => {
+        win.close();
+      };
+
       win.document.body.appendChild(downloadButton);
+      win.document.body.appendChild(closeButton);
 
       // Handle window close event (close the new window and restore state)
       win.addEventListener("beforeunload", () => {
