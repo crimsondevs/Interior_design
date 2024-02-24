@@ -58,91 +58,88 @@ const SideMenu: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    // Validation check
-    if (
-      !imageGallery.Category ||
-      !imageGallery.designStyle ||
-      !imageGallery.imageUpload ||
-      !imageGallery.prompt ||
-      !imageGallery.negative_prompt
-    ) {
-      toast.error("Please Select All Options!");
+    if (!prompt || !negative_prompt) {
+      toast.error("Please fill in both prompts!");
       return;
     }
 
     setIsGeneratingImage(true);
-    // Sending POST request
-    axios.post("https://58bzttxwyfejl6-4996.proxy.runpod.net/update-prompt", imageGallery)
+    axios.post("https://58bzttxwyfejl6-4996.proxy.runpod.net/update-prompt", { prompt, negative_prompt })
       .then(response => {
         const requestId = response.data.request_id;
         pollForImage(requestId);
       })
       .catch(error => {
         toast.error("Error while sending data: " + error.message);
-        setIsGeneratingImage(false); // Reset the flag in case of error
+        setIsGeneratingImage(false);
       });
   };
   
   // Function to poll for the image
   const pollForImage = (requestId) => {
-    let hasNotified = false; // Flag to track if the notification has been shown
-  
-    const fetchImage = () => {
-      axios.get(`https://58bzttxwyfejl6-4996.proxy.runpod.net/get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
-      .then(imageResponse => {
-        if (imageResponse.status === 200) {
-          const imageUrl = URL.createObjectURL(imageResponse.data);
-          handleImageDownload(imageUrl);
-          setIsGeneratingImage(false); // Reset the flag when image is ready
-        } else if (imageResponse.status === 504) {
-          toast.error("Image generation timed out.");
-          setIsGeneratingImage(false); // Reset the flag in case of timeout
+    axios.get(`https://58bzttxwyfejl6-4996.proxy.runpod.net/get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
+      .then(response => {
+        if (response.status === 200) {
+          const imageUrl = URL.createObjectURL(response.data);
+          openImageWindow(imageUrl);
+          setIsGeneratingImage(false);
         } else {
-          // ... (existing code)
+          toast.error("Error fetching image.");
+          setIsGeneratingImage(false);
         }
       })
       .catch(error => {
         toast.error("Error fetching image: " + error.message);
-        setIsGeneratingImage(false); // Reset the flag in case of error
+        setIsGeneratingImage(false);
       });
   };
-  
-    fetchImage();
+
+  const openImageWindow = (imageUrl) => {
+    const newWindow = window.open("", "_blank");
+    newWindow.document.write(`
+      <html>
+      <head><title>Generated Image</title></head>
+      <body>
+        <img src="${imageUrl}" alt="Generated Image" style="max-width: 100%; display: block; margin: auto;"/>
+        <button onclick="window.close()">Close</button>
+      </body>
+      </html>
+    `);
   };
 
   return (
     <div className="flex min-h-screen">
       <Toaster />
       {/* Sidebar */}
-      <div className="flex flex-col w-28 bg-[#ddddde] text-white">
-        <div className="flex flex-col p-4 mt-24">
+      <div className="flex flex-col w-20 bg-[#ddddde] text-white">
+        <div className="flex flex-col p-3 mt-24">
           <button className="mb-4 text-sm">
             <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center hover:bg-purple-700 transition duration-300">
               <img
                 src="/assets/logo genia 1.png"
                 alt="Logo"
-                className="w-16 h-16 absolute left-[1.65rem] -mt-2"
+                className="w-16 h-16 absolute left-[1.65rem] -ml-2 -mt-3"
               />
             </div>
-            <p className="text-center text-black mt-2 -ml-2">Create</p>
+            <p className="text-center text-black mt-2 -ml-0">Create</p>
           </button>
           <button className="mb-4 text-sm text-center">
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
               <HeartIcon size={32} color="purple" />
             </div>
-            <p className="text-center text-black mt-2 -ml-5">My Favorites</p>
+            <p className="text-center text-black mt-2 -ml-0">My Favorite</p>
           </button>
           <button className="mb-4 text-sm text-center">
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
               <Folder size={32} color="purple" />
             </div>
-            <p className="text-center text-black mt-2 -ml-2">My Library</p>
+            <p className="text-center text-black mt-2 -ml-0">My Library</p>
           </button>
           <button className="mb-4 text-sm text-center">
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
               <MessageCircle size={32} color="purple" />
             </div>
-            <p className="text-center text-black mt-2 -ml-2">Ask gpt</p>
+            <p className="text-center text-black mt-2 -ml-0">Ask gpt</p>
           </button>
           <button className="mb-4 text-sm text-center">
             <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
@@ -155,7 +152,7 @@ const SideMenu: React.FC = () => {
         </div>
       </div>
       {/* Expanded Area */}
-      <div className="flex flex-col items-center justify-start w-72 bg-[#2C2F48]/10 text-white p-4">
+      <div className="flex flex-col items-center justify-start w-65 bg-[#2C2F48]/10 text-white p-4">
         {/* Genia App Icon */}
         <img
           className="mb-4 w-40 h-16"
@@ -230,11 +227,11 @@ const SideMenu: React.FC = () => {
         {/* Additional Components */}
         {/* Add the rest of your components here, as per your existing code */}
         <button onClick={handleSubmit}>
-          <div className="flex justify-center items-center">
+          <div className="flex justify-left items-center">
           <img
             alt=""
             src="/assets/generate icone.webp"
-            className=" absolute bottom-[5.5rem] left-[11rem] w-36 h-36"
+            className="mb-4 w-40 h-40"
           />
             </div>
         </button>
