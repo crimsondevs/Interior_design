@@ -13,8 +13,8 @@ function CardSlider() {
     infinite: true,
     speed: 800,
     slidesToShow: 4,
-    slidesToScroll: 3,
-    centerMode: 1, 
+    slidesToScroll: 2,
+    centerMode: 0, 
   };
 
   const cards = [
@@ -46,7 +46,7 @@ function CardSlider() {
   };
 
   return (
-    <div className="w-[77vw] h-[30vh] overflow-hidden">
+    <div className="w-[75vw] h-[30vh] overflow-hidden">
       <h1 className="text-3xl font-medium mb-3 text-center" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '79vw', height: '5vh' }}>Select Category</h1>
       <Slider {...settings}>
         {cards.map((card, index) => (
