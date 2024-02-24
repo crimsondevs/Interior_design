@@ -224,8 +224,8 @@ const SideMenu = () => {
         {/* Text Input Fields */}
         <textarea
           className=" rounded-2xl p-4 text-black border-none outline-none resize-none"
-          value={negative_prompt}
-          onChange={onNPromptChange}
+          value={negativePrompt}
+          onChange={onNegativePromptChange}
           placeholder="Negatif prompts"
         />
 
