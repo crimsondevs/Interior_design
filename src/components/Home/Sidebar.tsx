@@ -3,40 +3,36 @@ import {
   Folder,
   HeartIcon,
   MessageCircle,
-  Upload,
   Minus,
   Plus,
+  Upload,
 } from "lucide-react";
 import { imageGalleryAtom } from "@/atom";
 import { useAtom } from "jotai";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import './SideMenu.css'; // Assume styles are defined in this CSS file
 
-const SideMenu = () => {
+
+const SideMenu: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
   const [imageGallery, setImageGallery] = useAtom(imageGalleryAtom);
   const [prompt, setPrompt] = useState<string>("");
-  const [negativePrompt, setNegativePrompt] = useState<string>("");
-  const [isGeneratingImage, setIsGeneratingImage] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [modalImage, setModalImage] = useState<string>("");
+  const [negative_prompt, setNPrompt] = useState<string>("");
 
-  // Handle prompt changes
   const onPromptChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const prompt = event.target.value;
     setPrompt(prompt);
     setImageGallery((prev) => ({ ...prev, prompt }));
   };
 
-  // Handle negative prompt changes
-  const onNegativePromptChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const negativePrompt = event.target.value;
-    setNegativePrompt(negativePrompt);
-    setImageGallery((prev) => ({ ...prev, negative_prompt: negativePrompt }));
+  const [isGeneratingImage, setIsGeneratingImage] = useState<boolean>(false);
+
+  const onNPromptChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const negative_prompt = event.target.value;
+    setNPrompt(negative_prompt);
+    setImageGallery((prev) => ({ ...prev, negative_prompt }));
   };
 
-  // Handle image upload
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedImage = event.target.files?.[0];
     if (uploadedImage) {
@@ -52,8 +48,17 @@ const SideMenu = () => {
     }
   };
 
-  // Submit and generate image
+  const handleImageDownload = (imageUrl) => {
+    const link = document.createElement('a');
+    link.href = imageUrl;
+    link.download = 'generated_image.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const handleSubmit = () => {
+    // Validation check
     if (
       !imageGallery.Category ||
       !imageGallery.designStyle ||
@@ -66,6 +71,7 @@ const SideMenu = () => {
     }
 
     setIsGeneratingImage(true);
+    // Sending POST request
     axios.post("https://58bzttxwyfejl6-4996.proxy.runpod.net/update-prompt", imageGallery)
       .then(response => {
         const requestId = response.data.request_id;
@@ -73,47 +79,39 @@ const SideMenu = () => {
       })
       .catch(error => {
         toast.error("Error while sending data: " + error.message);
-        setIsGeneratingImage(false);
+        setIsGeneratingImage(false); // Reset the flag in case of error
       });
   };
-
-  // Poll for image
+  
+  // Function to poll for the image
   const pollForImage = (requestId) => {
-    axios.get(`https://58bzttxwyfejl6-4996.proxy.runpod.net/get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
+    let hasNotified = false; // Flag to track if the notification has been shown
+  
+    const fetchImage = () => {
+      axios.get(`https://58bzttxwyfejl6-4996.proxy.runpod.net/get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
       .then(imageResponse => {
         if (imageResponse.status === 200) {
           const imageUrl = URL.createObjectURL(imageResponse.data);
-          setIsGeneratingImage(false);
-          setModalImage(imageUrl);
-          setIsModalOpen(true); // Open the modal with the image
+          handleImageDownload(imageUrl);
+          setIsGeneratingImage(false); // Reset the flag when image is ready
         } else if (imageResponse.status === 504) {
           toast.error("Image generation timed out.");
-          setIsGeneratingImage(false);
+          setIsGeneratingImage(false); // Reset the flag in case of timeout
+        } else {
+          // ... (existing code)
         }
       })
       .catch(error => {
         toast.error("Error fetching image: " + error.message);
-        setIsGeneratingImage(false);
+        setIsGeneratingImage(false); // Reset the flag in case of error
       });
   };
-
-  // Download image
-  const handleImageDownload = () => {
-    const link = document.createElement('a');
-    link.href = modalImage;
-    link.download = 'generated_image.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  // Close modal
-  const closeModal = () => {
-    setIsModalOpen(false);
+  
+    fetchImage();
   };
 
   return (
-    <div className="flex min-h-screen ${isModalOpen ? 'blur-sm' : ''}`}">
+    <div className="flex min-h-screen">
       <Toaster />
       {/* Sidebar */}
       <div className="flex flex-col w-28 bg-[#ddddde] text-white">
@@ -224,8 +222,8 @@ const SideMenu = () => {
         {/* Text Input Fields */}
         <textarea
           className=" rounded-2xl p-4 text-black border-none outline-none resize-none"
-          value={negativePrompt}
-          onChange={onNegativePromptChange}
+          value={negative_prompt}
+          onChange={onNPromptChange}
           placeholder="Negatif prompts"
         />
 
@@ -241,19 +239,6 @@ const SideMenu = () => {
             </div>
         </button>
       </div>
-      {/* Modal Component for Image Preview */}
-      {isModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>&times;</span>
-            <img src={modalImage} alt="Generated" className="modal-image" />
-            <div className="modal-actions">
-              <button onClick={handleImageDownload} className="download-btn">Download</button>
-              <button onClick={closeModal} className="close-btn">Close</button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
