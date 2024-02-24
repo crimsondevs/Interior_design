@@ -113,7 +113,7 @@ const SideMenu = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen ${isModalOpen ? 'blur-sm' : ''}`}">
       <Toaster />
       {/* Sidebar */}
       <div className="flex flex-col w-28 bg-[#ddddde] text-white">
