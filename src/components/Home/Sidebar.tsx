@@ -48,13 +48,32 @@ const SideMenu: React.FC = () => {
     }
   };
 
+  const [newWindow, setNewWindow] = useState<Window | null>(null);
+
   const handleImageDownload = (imageUrl) => {
-    const link = document.createElement('a');
-    link.href = imageUrl;
-    link.download = 'generated_image.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const blob = new Blob([imageResponse.data], { type: "image/png" });
+    const blobUrl = URL.createObjectURL(blob);
+
+    const win = window.open(blobUrl, "_blank"); // Open in a new window
+    setNewWindow(win); // Store window reference
+
+    win.onload = () => {
+      // Add download button/link to the new window
+      const downloadButton = document.createElement("a");
+      downloadButton.href = blobUrl;
+      downloadButton.download = "generated_image.png";
+      downloadButton.innerText = "Download Image";
+      win.document.body.appendChild(downloadButton);
+
+      // Handle window close event (close the new window and restore state)
+      win.addEventListener("beforeunload", () => {
+        if (newWindow) {
+          URL.revokeObjectURL(blobUrl); // Revoke temporary blob URL
+          setNewWindow(null); // Reset window reference
+          // Optionally: use history.pushState to restore original window state
+        }
+      });
+    };
   };
 
   const handleSubmit = () => {
@@ -71,7 +90,7 @@ const SideMenu: React.FC = () => {
     }
 
     setIsGeneratingImage(true);
-    // Sending POST request
+
     axios.post("https://58bzttxwyfejl6-4996.proxy.runpod.net/update-prompt", imageGallery)
       .then(response => {
         const requestId = response.data.request_id;
