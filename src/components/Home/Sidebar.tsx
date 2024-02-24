@@ -58,53 +58,56 @@ const SideMenu: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    if (!prompt || !negative_prompt) {
-      toast.error("Please fill in both prompts!");
+    // Validation check
+    if (
+      !imageGallery.Category ||
+      !imageGallery.designStyle ||
+      !imageGallery.imageUpload ||
+      !imageGallery.prompt ||
+      !imageGallery.negative_prompt
+    ) {
+      toast.error("Please Select All Options!");
       return;
     }
 
     setIsGeneratingImage(true);
-    axios.post("https://58bzttxwyfejl6-4996.proxy.runpod.net/update-prompt", { prompt, negative_prompt })
+    // Sending POST request
+    axios.post("https://0tq2uw693a5hw5-4996.proxy.runpod.net/update-prompt", imageGallery)
       .then(response => {
         const requestId = response.data.request_id;
         pollForImage(requestId);
       })
       .catch(error => {
         toast.error("Error while sending data: " + error.message);
-        setIsGeneratingImage(false);
+        setIsGeneratingImage(false); // Reset the flag in case of error
       });
   };
   
   // Function to poll for the image
   const pollForImage = (requestId) => {
-    axios.get(`https://58bzttxwyfejl6-4996.proxy.runpod.net/get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
-      .then(response => {
-        if (response.status === 200) {
-          const imageUrl = URL.createObjectURL(response.data);
-          openImageWindow(imageUrl);
-          setIsGeneratingImage(false);
+    let hasNotified = false; // Flag to track if the notification has been shown
+  
+    const fetchImage = () => {
+      axios.get(`https://0tq2uw693a5hw5-4996.proxy.runpod.net/get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
+      .then(imageResponse => {
+        if (imageResponse.status === 200) {
+          const imageUrl = URL.createObjectURL(imageResponse.data);
+          handleImageDownload(imageUrl);
+          setIsGeneratingImage(false); // Reset the flag when image is ready
+        } else if (imageResponse.status === 504) {
+          toast.error("Image generation timed out.");
+          setIsGeneratingImage(false); // Reset the flag in case of timeout
         } else {
-          toast.error("Error fetching image.");
-          setIsGeneratingImage(false);
+          // ... (existing code)
         }
       })
       .catch(error => {
         toast.error("Error fetching image: " + error.message);
-        setIsGeneratingImage(false);
+        setIsGeneratingImage(false); // Reset the flag in case of error
       });
   };
-
-  const openImageWindow = (imageUrl) => {
-    const newWindow = window.open("", "_blank");
-    newWindow.document.write(`
-      <html>
-      <head><title>Generated Image</title></head>
-      <body>
-        <img src="${imageUrl}" alt="Generated Image" style="max-width: 100%; display: block; margin: auto;"/>
-        <button onclick="window.close()">Close</button>
-      </body>
-      </html>
-    `);
+  
+    fetchImage();
   };
 
   return (
