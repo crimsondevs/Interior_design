@@ -3,36 +3,40 @@ import {
   Folder,
   HeartIcon,
   MessageCircle,
+  Upload,
   Minus,
   Plus,
-  Upload,
 } from "lucide-react";
 import { imageGalleryAtom } from "@/atom";
 import { useAtom } from "jotai";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import './SideMenu.css'; // Assume styles are defined in this CSS file
 
-
-const SideMenu: React.FC = () => {
+const SideMenu = () => {
   const [image, setImage] = useState<string | null>(null);
   const [imageGallery, setImageGallery] = useAtom(imageGalleryAtom);
   const [prompt, setPrompt] = useState<string>("");
-  const [negative_prompt, setNPrompt] = useState<string>("");
+  const [negativePrompt, setNegativePrompt] = useState<string>("");
+  const [isGeneratingImage, setIsGeneratingImage] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [modalImage, setModalImage] = useState<string>("");
 
+  // Handle prompt changes
   const onPromptChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const prompt = event.target.value;
     setPrompt(prompt);
     setImageGallery((prev) => ({ ...prev, prompt }));
   };
 
-  const [isGeneratingImage, setIsGeneratingImage] = useState<boolean>(false);
-
-  const onNPromptChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const negative_prompt = event.target.value;
-    setNPrompt(negative_prompt);
-    setImageGallery((prev) => ({ ...prev, negative_prompt }));
+  // Handle negative prompt changes
+  const onNegativePromptChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const negativePrompt = event.target.value;
+    setNegativePrompt(negativePrompt);
+    setImageGallery((prev) => ({ ...prev, negative_prompt: negativePrompt }));
   };
 
+  // Handle image upload
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedImage = event.target.files?.[0];
     if (uploadedImage) {
@@ -48,64 +52,8 @@ const SideMenu: React.FC = () => {
     }
   };
 
-const [newWindow, setNewWindow] = useState<Window | null>(null);
-
-  const handleImageDownload = (imageUrl) => {
-    const blob = new Blob([imageResponse.data], { type: "image/png" });
-    const blobUrl = URL.createObjectURL(blob);
-
-    const win = window.open(blobUrl, "_blank", "width=400,height=300"); // Set window size and options
-    setNewWindow(win); // Store window reference
-
-    win.onload = () => {
-      // Add download button/link and close button to the new window
-      const downloadButton = document.createElement("button");
-      downloadButton.classList.add(
-        "bg-blue-500",
-        "hover:bg-blue-700",
-        "text-white",
-        "font-bold",
-        "py-2",
-        "px-4",
-        "rounded"
-      );
-      downloadButton.innerText = "Download Image";
-      downloadButton.onclick = () => {
-        win.location.href = blobUrl; // Download image directly
-      };
-
-      const closeButton = document.createElement("button");
-      closeButton.classList.add(
-        "bg-red-500",
-        "hover:bg-red-700",
-        "text-white",
-        "font-bold",
-        "py-2",
-        "px-4",
-        "rounded",
-        "ml-4"
-      );
-      closeButton.innerText = "Close";
-      closeButton.onclick = () => {
-        win.close();
-      };
-
-      win.document.body.appendChild(downloadButton);
-      win.document.body.appendChild(closeButton);
-
-      // Handle window close event (close the new window and restore state)
-      win.addEventListener("beforeunload", () => {
-        if (newWindow) {
-          URL.revokeObjectURL(blobUrl); // Revoke temporary blob URL
-          setNewWindow(null); // Reset window reference
-          // Optionally: use history.pushState to restore original window state
-        }
-      });
-    };
-  };
-
+  // Submit and generate image
   const handleSubmit = () => {
-    // Validation check
     if (
       !imageGallery.Category ||
       !imageGallery.designStyle ||
@@ -118,7 +66,6 @@ const [newWindow, setNewWindow] = useState<Window | null>(null);
     }
 
     setIsGeneratingImage(true);
-
     axios.post("https://58bzttxwyfejl6-4996.proxy.runpod.net/update-prompt", imageGallery)
       .then(response => {
         const requestId = response.data.request_id;
@@ -126,35 +73,43 @@ const [newWindow, setNewWindow] = useState<Window | null>(null);
       })
       .catch(error => {
         toast.error("Error while sending data: " + error.message);
-        setIsGeneratingImage(false); // Reset the flag in case of error
+        setIsGeneratingImage(false);
       });
   };
-  
-  // Function to poll for the image
+
+  // Poll for image
   const pollForImage = (requestId) => {
-    let hasNotified = false; // Flag to track if the notification has been shown
-  
-    const fetchImage = () => {
-      axios.get(`https://58bzttxwyfejl6-4996.proxy.runpod.net/get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
+    axios.get(`https://58bzttxwyfejl6-4996.proxy.runpod.net/get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
       .then(imageResponse => {
         if (imageResponse.status === 200) {
           const imageUrl = URL.createObjectURL(imageResponse.data);
-          handleImageDownload(imageUrl);
-          setIsGeneratingImage(false); // Reset the flag when image is ready
+          setIsGeneratingImage(false);
+          setModalImage(imageUrl);
+          setIsModalOpen(true); // Open the modal with the image
         } else if (imageResponse.status === 504) {
           toast.error("Image generation timed out.");
-          setIsGeneratingImage(false); // Reset the flag in case of timeout
-        } else {
-          // ... (existing code)
+          setIsGeneratingImage(false);
         }
       })
       .catch(error => {
         toast.error("Error fetching image: " + error.message);
-        setIsGeneratingImage(false); // Reset the flag in case of error
+        setIsGeneratingImage(false);
       });
   };
-  
-    fetchImage();
+
+  // Download image
+  const handleImageDownload = () => {
+    const link = document.createElement('a');
+    link.href = modalImage;
+    link.download = 'generated_image.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Close modal
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -269,8 +224,8 @@ const [newWindow, setNewWindow] = useState<Window | null>(null);
         {/* Text Input Fields */}
         <textarea
           className=" rounded-2xl p-4 text-black border-none outline-none resize-none"
-          value={negative_prompt}
-          onChange={onNPromptChange}
+          value={negativePrompt}
+          onChange={onPromptChange}
           placeholder="Negatif prompts"
         />
 
@@ -286,6 +241,19 @@ const [newWindow, setNewWindow] = useState<Window | null>(null);
             </div>
         </button>
       </div>
+      {/* Modal Component for Image Preview */}
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={closeModal}>&times;</span>
+            <img src={modalImage} alt="Generated" className="modal-image" />
+            <div className="modal-actions">
+              <button onClick={handleImageDownload} className="download-btn">Download</button>
+              <button onClick={closeModal} className="close-btn">Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
