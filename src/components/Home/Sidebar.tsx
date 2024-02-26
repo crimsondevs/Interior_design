@@ -116,38 +116,38 @@ const SideMenu = () => {
   <div className={`flex min-h-screen ${isModalOpen}`}>
       <Toaster />
       {/* Sidebar */}
-      <div className="flex flex-col w-24 bg-[#ddddde] text-white">
+      <div className="flex flex-col w-20 bg-[#ddddde] text-white">
         <div className="flex flex-col p-4 mt-24">
           <button className="mb-4 text-sm">
-            <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center hover:bg-purple-700 transition duration-300">
+            <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center hover:bg-purple-700 transition duration-300">
               <img
                 src="/assets/logo genia 1.png"
                 alt="Logo"
-                className="w-16 h-16 absolute left-[1.65rem] -mt-2"
+                className="w-12 h-12 absolute left-[1.65rem] -mt-2"
               />
             </div>
-            <p className="text-center text-black mt-2 -ml-1">Create</p>
+            <p className="text-center text-black mt-1 -ml-0">Create</p>
           </button>
           <button className="mb-4 text-sm text-center">
-            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
+            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE]">
               <HeartIcon size={32} color="purple" />
             </div>
-            <p className="text-center text-black mt-2 -ml-1">My Favorites</p>
+            <p style={{ textAlign: "justify" }} className="text-black text-center mt-1 -ml-2">Favorites</p>
           </button>
           <button className="mb-4 text-sm text-center">
-            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
+            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE]">
               <Folder size={32} color="purple" />
             </div>
-            <p className="text-center text-black mt-2 -ml-1">My Library</p>
+            <p className="text-center text-black mt-2 -ml-1">Library</p>
           </button>
           <button className="mb-4 text-sm text-center">
-            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
+            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE]">
               <MessageCircle size={32} color="purple" />
             </div>
-            <p className="text-center text-black mt-2 -ml-1">Ask gpt</p>
+            <p className="text-center text-black mt-2 -ml-0">Ask gpt</p>
           </button>
           <button className="mb-4 text-sm text-center">
-            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-12 h-12 bg-[#BEBEBE]">
+            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE]">
               {/* <MessageCircle size={32} color="purple" /> */}
             </div>
             {/* <p className="text-center mt-2 -ml-4">
