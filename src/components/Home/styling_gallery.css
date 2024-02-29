@@ -26,22 +26,22 @@
 
 .title-style {
   text-align: center;
-  margin: 20px 0;
+  margin: 1% ;
 }
 
 .images-wrapper {
-  height: 50vh;
+  height: 70vh;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px; /* Adjust gap as needed */
+  gap: 20px; /* Adjust gap as needed */
   justify-content: center;
   overflow-y: auto;
-  max-width: 80%;
-  padding-bottom: 20px;
+  max-width: 90%;
+  padding-bottom: 10px;
 }
 
 .image-container {
-  width: calc(25% - 25px); /* Adjust for gap, assuming 10px gap on each side */
+  width: calc(20% - 01vw); /* Adjust for gap, assuming 10px gap on each side */
   position: relative;
   cursor: pointer;
 }
@@ -63,14 +63,143 @@
   width: 2vw; /* Adjust size as needed */
 }
 
-/* Example media query for smaller screens */
-@media (max-width: 50px) {
+/* IPAD Pro */
+
+@media (width: 1024px) {
   .images-wrapper {
-    justify-content: center;
+    justify-content: left;
+    padding-left: 3vw;
   }
   .image-style {
-    width: 50vw; /* Adjust size on smaller screens */
+    width: 20vw; /* Adjust size on smaller screens */
   }
+  .image-container {
+    width: calc(30% - 04vw); /* Adjust for gap, assuming 10px gap on each side */
+    position: relative;
+    cursor: pointer;
+  }
+  .title-style {
+    font-weight: bold;
+    font-size: 20px;
+    text-align: left;
+    padding-right: 90px;
+    padding-bottom: 20px;
+}
+}
+
+/* IPAD MINI */
+
+@media (width: 768px) {
+  .images-wrapper {
+    height: 70vh;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Adjust gap as needed */
+    justify-content: left;
+    overflow-y: auto;
+    max-width: 80%;
+    padding-bottom: 10px;
+    padding-left: 1vw;
+  }
+  .image-style {
+    width: 20vw; /* Adjust size on smaller screens */
+  }
+  .image-container {
+    width: calc(30% - 04vw); /* Adjust for gap, assuming 10px gap on each side */
+    position: relative;
+    cursor: pointer;
+  }
+  .gallery-container {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    width: 70vw; /* Adjusted to use the full width */
+    padding: 1px;
+  }
+  .title-style {
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    padding-right: 80px;
+    padding-bottom: 10px;
+}
+}
+
+
+  /* IPAD AIR */
+
+@media (width: 820px) {
+  .gallery-container {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    width: 70vw; /* Adjusted to use the full width */
+    padding: 1px;
+  }
+  .image-style {
+    width: 15vw; /* Adjust size on smaller screens */
+  }
+  .image-container {
+    width: calc(30% - 03vw); /* Adjust for gap, assuming 10px gap on each side */
+    position: relative;
+    cursor: pointer;
+  }
+  .images-wrapper {
+    height: 75vh;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Adjust gap as needed */
+    justify-content: left;
+    overflow-y: auto;
+    max-width: 80%;
+    padding-bottom: 10px;
+    padding-left: 1vw;
+  }
+  .title-style {
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+    padding-right: 60px;
+    padding-bottom: 10px;
+}
+}
+
+/* Surface Pro 7 */
+
+@media (width: 912px) {
+  .gallery-container {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    width: 70vw; /* Adjusted to use the full width */
+    padding: 1px;
+  }
+  .image-style {
+    width: 15vw; /* Adjust size on smaller screens */
+  }
+  .image-container {
+    width: calc(30% - 03vw); /* Adjust for gap, assuming 10px gap on each side */
+    position: relative;
+    cursor: pointer;
+  }
+  .images-wrapper {
+    height: 75vh;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Adjust gap as needed */
+    justify-content: left;
+    overflow-y: auto;
+    max-width: 80%;
+    padding-bottom: 10px;
+    padding-left: 1vw;
+  }
+  .title-style {
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    padding-right: 60px;
+    padding-bottom: 10px;
+}
 }
 
 
