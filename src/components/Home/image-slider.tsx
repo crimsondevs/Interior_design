@@ -14,7 +14,47 @@ function CardSlider() {
     speed: 800,
     slidesToShow: 4,
     slidesToScroll: 2,
-    centerMode: 0, 
+    centerMode: 0,
+    responsive: [
+      {
+        breakpoint: 1025, // Means 1024px screen size and below
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 2,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 913,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 2,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 821,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 2,
+          infinite: true,
+          dots: true,
+        },
+        
+      },
+      {
+        breakpoint: 769,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          infinite: true,
+          dots: true,
+        },
+        
+      },
+    ], 
   };
 
   const cards = [
@@ -46,17 +86,13 @@ function CardSlider() {
   };
 
   return (
-    <div className="w-[75vw] h-[30vh] overflow-hidden">
-      <h1 className="text-3xl font-medium mb-3 text-center" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '79vw', height: '5vh' }}>Select Category</h1>
+    <div className="slider-container">
+      <h1 className="header-title">Select Category</h1>
       <Slider {...settings}>
         {cards.map((card, index) => (
           <div key={index} className="px-6 card-container">
             <div
-              className={`relative cursor-pointer overflow-hidden transform transform-scale ${
-                selectedCard === index
-                  ? 'scale-110 selected'
-                  : 'not-selected'
-              }`}
+              className={`card ${selectedCard === index ? 'selected' : 'not-selected'}`}
               onClick={() => handleClick(index)}
             >
               <img
