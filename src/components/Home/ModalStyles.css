@@ -1,0 +1,99 @@
+.modal-container {
+  width: 90vw;
+  display: flex;
+  overflow: hidden;
+  min-height: 80vh;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 1100;
+}
+
+.modal-content {
+  width: 80%; /* Adjust based on preference */
+  max-width: 1313px; /* Maximum width */
+  height: auto; /* Adjust height based on content */
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.48);
+  padding: 20px;
+  justify-content: center;
+  border-radius: 20px 20px 0px 0px; /* Optional: if you want rounded corners */
+  z-index: 1000;
+  align-items: center;
+  padding-left: 300px;
+}
+
+
+.modal-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  background-color: rgba(237, 242, 247, 1);
+  border-radius: 20px 20px 40px 40px;
+}
+
+.modal-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px 20px 0px 0px; /* Match parent's border-radius */
+}
+.white-bar {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 15%; /* Height of the white bar */
+  background-color: rgb(245, 245, 245);
+  border-radius: 0 0 60px 60px; /* Bottom edges rounded */
+  display: flex;
+  align-items: center; /* Center the button vertically within the bar */
+  justify-content: center; /* Center the button horizontally */
+}
+
+.download-section {
+  display: flex;
+  align-items: center;
+  justify-content: ; /* Adjust based on design */
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.button-icon {
+  width: 34px;
+  height: 26px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+}
+.backdrop {
+  position: fixed; /* Cover the entire viewport */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(5px); /* Adjust the blur value as needed */
+  z-index: 999; /* Ensure it's behind the modal but above other content */
+}
+
+/* Add responsive adjustments */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+  }
+
+  .button-icon {
+    width: 24px; /* Smaller icons on smaller screens */
+    height: 18px;
+  }
+}
+
