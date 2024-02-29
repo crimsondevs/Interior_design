@@ -12,6 +12,7 @@ import { useAtom } from "jotai";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import './SideMenu.css'; // Assume styles are defined in this CSS file
+import './ModalStyles.css'; 
 
 const SideMenu = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -160,7 +161,7 @@ const SideMenu = () => {
       <div className="flex flex-col items-center justify-start w-72 bg-[#2C2F48]/10 text-white p-4">
         {/* Genia App Icon */}
         <img
-          className="mb-4 w-40 h-16"
+          className="mb-4 w-32 h-14"
           alt="Genia App Icon"
           src="/assets/[removal 2.png"
         />
@@ -186,8 +187,8 @@ const SideMenu = () => {
           />
           {!image ? (
             <>
-              <Upload size={24} color="white" className="w-8 h-8 mx-auto" />
-              <span className="text-lg mt-1">Upload Photo</span>
+              <Upload size={24} color="white" className="w-6 h-6 mx-auto" />
+              <span className="text-m mt-1">Upload Photo</span>
             </>
           ) : (
             <img src={image} alt="image uploaded" className="w-32 h-16" />
@@ -236,76 +237,30 @@ const SideMenu = () => {
           <img
             alt=""
             src="/assets/generate icone.webp"
-            className="bottom-[100px] left-[180px] w-36 h-36"
+            className="bottom-[100px] left-[180px] w-28 h-28"
           />
             </div>
         </button>
       </div>
       {isModalOpen && (
-  <div style={{
-    position: 'fixed', 
-    top: 0, 
-    left: 0, 
-    width: '100vw', 
-    height: '100vh', 
-    backgroundColor: 'rgba(0, 0, 0, 0.6)', 
-    display: 'flex', 
-    alignItems: 'center', 
-    justifyContent: 'center',
-    zIndex: 1050
-  }}>
-    <div style={{
-      width: '80vw', 
-      height: '80vh', 
-      display: 'flex', 
-      flexDirection: 'column',
-      justifyContent: 'space-between', 
-      alignItems: 'center', // Center align the items vertically
-      paddingBottom: '100px', 
-      boxSizing: 'border-box',
-      borderRadius: '10px',
-      backgroundColor: 'rgba(0, 0, 0, 0.0)', // Ensuring the background is transparent
-    }}>
-      <span style={{
-        alignSelf: 'flex-end', 
-        cursor: 'pointer', 
-        fontSize: '10px'
-      }} onClick={closeModal}>&times;</span>
-      <img src={modalImage} alt="Generated" style={{
-        maxWidth: '100%', 
-        maxHeight: '100%', 
-        objectFit: 'contain',
-        flexGrow: 1
-      }} />
-      <div style={{
-        width: '58vw', // This will match the parent's width, assuming image takes full width
-        display: 'flex', 
-        justifyContent: 'space-around', 
-        backgroundColor: 'magenta', 
-        padding: '10px',
-        borderRadius: '10px', // Curved borders
-        boxSizing: 'border-box',
-        marginTop: '10px', // Add some space between the image and the bar if needed
-      }}>
-        <button style={{
-          backgroundColor: 'white', 
-          border: 'none', 
-          padding: '10px 20px', 
-          cursor: 'pointer',
-          borderRadius: '10px',
-          fontWeight: 'bold' // Make text bold
-        }} onClick={handleImageDownload}>Download</button>
-        <button style={{
-          backgroundColor: 'white', 
-          border: 'none', 
-          padding: '10px 20px',
-          borderRadius: '10px', 
-          cursor: 'pointer',
-          fontWeight: 'bold' // Make text bold
-        }} onClick={closeModal}>Close</button>
+        <div className="backdrop">
+  <div className="modal-container">
+    <div className="modal-content">
+      <div className="modal-image-wrapper">
+        <img alt="Generated" src={modalImage} className="modal-image" />
+        <div className="white-bar">
+          <button onClick={handleImageDownload} className="icon-button">
+            <img alt="Download" src="/assets/download-icon.svg" className="button-icon" />
+          </button>
+          <span>Download</span>
+        </div>
       </div>
+      <button onClick={closeModal} className="close-button">
+        <img alt="Close" src="/assets/close-icon.svg" className="button-icon" />
+      </button>
     </div>
   </div>
+</div>
 )}
 
     </div>
