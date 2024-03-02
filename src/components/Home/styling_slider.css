@@ -252,7 +252,7 @@
   }
   .slider-container {
     width: 50vw; /* This is equivalent to what you did with w-[75vw] */
-    height: 22vh; /* Equivalent to h-[30vh] */
+    height: 18vh; /* Equivalent to h-[30vh] */
     overflow: hidden;
   }
   .card.selected {
@@ -271,3 +271,54 @@
     padding-right: 140px;
   }
 }
+
+@media (width: 1600px) {
+  .card-container {
+    padding-top: 20px;
+    padding-bottom: 10px;
+    width: 80%;
+    height: 8vh; /* Adjust this to your desired card height */
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  
+  .card-container img {
+    max-width: 17vw;
+    max-height: 100vh;
+    object-fit: cover;
+  }
+  .card {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    transform: scale(1); /* Equivalent to scale-100 */
+    width: 15vw; /* Tailwind's w-48, assuming the base font size is 16px (12rem = 192px) */
+    transition: transform 0.3s ease; /* For smooth scaling */
+    border: none;
+  }
+  .slider-container {
+    width: 75vw; /* This is equivalent to what you did with w-[75vw] */
+    height: 16vh; /* Equivalent to h-[30vh] */
+    overflow: hidden;
+  }
+  .card.selected {
+    transform: scale(1.1); /* Equivalent to scale-110 */
+  }
+  .header-title {
+    font-size: 1.875rem; /* Equivalent to text-3xl */
+    font-weight: 500; /* Equivalent to font-medium */
+    margin-bottom: 0.75rem; /* Equivalent to mb-3 */
+    text-align: center; /* Equivalent to text-center */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 82vw;
+    height: 5vh;
+    padding-right: 140px;
+  }
+}
+
