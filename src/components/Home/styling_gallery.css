@@ -201,5 +201,40 @@
     padding-bottom: 10px;
 }
 }
+@media (width: 1600px) {
+  .gallery-container {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    width: 77vw; /* Adjusted to use the full width */
+    padding: 1px;
+  }
+  .image-style {
+    width: 15vw; /* Adjust size on smaller screens */
+  }
+  .image-container {
+    width: calc(30% - 4vw); /* Adjust for gap, assuming 10px gap on each side */
+    position: relative;
+    cursor: pointer;
+  }
+  .images-wrapper {
+    height: 75vh;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Adjust gap as needed */
+    justify-content: left;
+    overflow-y: auto;
+    max-width: 80%;
+    padding-bottom: 10px;
+    padding-left: 1vw;
+  }
+  .title-style {
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    padding-right: 60px;
+    padding-bottom: 10px;
+}
+}
 
 
