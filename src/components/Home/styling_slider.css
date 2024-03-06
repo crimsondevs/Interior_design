@@ -63,8 +63,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 79vw;
+    width: 100vw;
     height: 5vh;
+    background-color: rgba(204, 153, 201, 0.3); /* Purplish and pinkish hint */
+    border-radius: 8px; /* Soft rounded corners */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    color: #333; /* Text color for contrast against the light background */
+    padding-right: 400px; /* Padding to ensure text does not touch the edges, adjust as needed */
   }
 
 
@@ -114,9 +119,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 79vw;
+    width: 100vw;
     height: 5vh;
-    padding-right: 90px;
+    background-color: rgba(204, 153, 201, 0.3); /* Purplish and pinkish hint */
+    border-radius: 8px; /* Soft rounded corners */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    color: #333; /* Text color for contrast against the light background */
+    padding-right: 320px; /* Padding to ensure text does not touch the edges, adjust as needed */
   }
 }
 
@@ -164,9 +173,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 79vw;
+    width: 100vw;
     height: 5vh;
-    padding-right: 140px;
+    background-color: rgba(204, 153, 201, 0.3); /* Purplish and pinkish hint */
+    border-radius: 8px; /* Soft rounded corners */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    color: #333; /* Text color for contrast against the light background */
+    padding-right: 400px; /* Padding to ensure text does not touch the edges, adjust as needed */
   }
 }
 /* IPAD AIR */
@@ -214,9 +227,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 79vw;
+    width: 100vw;
     height: 5vh;
-    padding-right: 140px;
+    background-color: rgba(204, 153, 201, 0.3); /* Purplish and pinkish hint */
+    border-radius: 8px; /* Soft rounded corners */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    color: #333; /* Text color for contrast against the light background */
+    padding-right: 320px; /* Padding to ensure text does not touch the edges, adjust as needed */
   }
 }
 
@@ -266,9 +283,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 79vw;
+    width: 100vw;
     height: 5vh;
-    padding-right: 140px;
+    background-color: rgba(204, 153, 201, 0.3); /* Purplish and pinkish hint */
+    border-radius: 8px; /* Soft rounded corners */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    color: #333; /* Text color for contrast against the light background */
+    padding-right: 310px; /* Padding to ensure text does not touch the edges, adjust as needed */
   }
 }
 
@@ -309,16 +330,20 @@
     transform: scale(1.1); /* Equivalent to scale-110 */
   }
   .header-title {
-    font-size: 1.875rem; /* Equivalent to text-3xl */
+    font-size: 3.875rem; /* Equivalent to text-3xl */
     font-weight: 500; /* Equivalent to font-medium */
     margin-bottom: 0.75rem; /* Equivalent to mb-3 */
     text-align: center; /* Equivalent to text-center */
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 82vw;
+    width: 100vw;
     height: 5vh;
-    padding-right: 140px;
+    background-color: rgba(204, 153, 201, 0.3); /* Purplish and pinkish hint */
+    border-radius: 8px; /* Soft rounded corners */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    color: #333; /* Text color for contrast against the light background */
+    padding-right: 400px; /* Padding to ensure text does not touch the edges, adjust as needed */
   }
 }
 
