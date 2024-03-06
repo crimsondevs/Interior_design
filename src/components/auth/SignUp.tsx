@@ -53,7 +53,7 @@ const SignUp = () => {
         left: 0,
         width: '100%',
         height: '100%',
-        backgroundImage: 'url("/public/assets/BG.png")',
+        backgroundImage: 'url("/assets/BG.png")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         filter: 'blur(8px)', // Apply the blur directly to the background image
