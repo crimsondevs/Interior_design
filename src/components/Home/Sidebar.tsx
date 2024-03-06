@@ -32,8 +32,17 @@ const SideMenu: React.FC = ({ }) => {
   const [modalImage, setModalImage] = useState<string>("");
 
   const goToLibrary = () => {
-    navigate('/library'); // Use the path to your library page
+    if (!isLoggedIn) {
+      toast.error("Please log in to see your Library", {
+        icon: '🔐',
+      });
+    }
+      else{
+        navigate('/library'); // Use the path to your library page
+      }
   };
+
+  
 
   const [logoutAnimation, setLogoutAnimation] = useState("");
   const { currentUser, logout } = useAuth(); // Assuming your useAuth hook provides a logout function
