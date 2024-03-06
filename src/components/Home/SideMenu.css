@@ -15,3 +15,15 @@
     width: 80%; /* Adjust as needed */
     /* Add more styling as needed */
   }
+  .fade-out-animation {
+    animation: fadeOut 1s ease-in-out forwards;
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
