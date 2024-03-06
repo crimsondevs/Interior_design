@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   Folder,
   HeartIcon,
@@ -12,9 +12,17 @@ import { useAtom } from "jotai";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import './SideMenu.css'; // Assume styles are defined in this CSS file
-import './ModalStyles.css'; 
+import './ModalStyles.css';
+import { useNavigate } from 'react-router-dom'; 
+import { auth } from "../../firebase"; // Import your Firebase auth instance
+import { useAuth } from "./../../context/AuthContext"; // Adjust the import path as needed
+import { db } from "../../firebase"; // Adjust the import path as needed
+import { collection, addDoc } from "firebase/firestore";
 
-const SideMenu = () => {
+
+
+
+const SideMenu: React.FC = ({ }) => {
   const [image, setImage] = useState<string | null>(null);
   const [imageGallery, setImageGallery] = useAtom(imageGalleryAtom);
   const [prompt, setPrompt] = useState<string>("");
@@ -22,6 +30,40 @@ const SideMenu = () => {
   const [isGeneratingImage, setIsGeneratingImage] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalImage, setModalImage] = useState<string>("");
+
+  const goToLibrary = () => {
+    navigate('/library'); // Use the path to your library page
+  };
+
+  const [logoutAnimation, setLogoutAnimation] = useState("");
+  const { currentUser, logout } = useAuth(); // Assuming your useAuth hook provides a logout function
+  const isLoggedIn = !!currentUser; 
+
+    const navigate = useNavigate();
+
+
+  
+    const handleLoginLogoutClick = async () => {
+      if (currentUser) {
+        setLogoutAnimation("fade-out-animation"); // Trigger the animation
+      } else {
+        navigate('/login'); // Directly navigate to login if not logged in
+      }
+    };
+
+    useEffect(() => {
+      if (logoutAnimation) {
+        const timer = setTimeout(async () => {
+          try {
+            await logout();
+            navigate('/'); // Navigate after logout
+          } catch (error) {
+            console.error("Failed to logout:", error);
+          }
+        }, 500); // Set timeout duration equal to animation duration
+        return () => clearTimeout(timer);
+      }
+    }, [logoutAnimation, logout, navigate]);
 
   // Handle prompt changes
   const onPromptChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -55,6 +97,14 @@ const SideMenu = () => {
 
   // Submit and generate image
   const handleSubmit = () => {
+    // Use isLoggedIn directly instead of checking auth.currentUser
+    if (!isLoggedIn) {
+      toast.error("Please log in to generate an image!", {
+        icon: '🔐',
+      });
+      return;
+    }
+  
     if (
       !imageGallery.Category ||
       !imageGallery.designStyle ||
@@ -62,10 +112,10 @@ const SideMenu = () => {
       !imageGallery.prompt ||
       !imageGallery.negative_prompt
     ) {
-      toast.error("Please Select All Options!");
+      toast.error("Please select all options!");
       return;
     }
-
+  
     setIsGeneratingImage(true);
     axios.post("https://58bzttxwyfejl6-4996.proxy.runpod.net/update-prompt", imageGallery)
       .then(response => {
@@ -81,12 +131,25 @@ const SideMenu = () => {
   // Poll for image
   const pollForImage = (requestId) => {
     axios.get(`https://58bzttxwyfejl6-4996.proxy.runpod.net/get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
-      .then(imageResponse => {
+      .then(async imageResponse => { // Mark this callback as async to use await inside
         if (imageResponse.status === 200) {
           const imageUrl = URL.createObjectURL(imageResponse.data);
           setIsGeneratingImage(false);
           setModalImage(imageUrl);
           setIsModalOpen(true); // Open the modal with the image
+  
+          // Now, save the image URL to Firestore
+          try {
+            await addDoc(collection(db, "userImages"), {
+              userId: currentUser.uid, // Make sure currentUser is correctly referenced
+              imageUrl: imageUrl, // This is a blob URL and not directly accessible; consider uploading to a storage service if needed
+              createdAt: new Date()
+            });
+            // Optionally, you could update your state or UI here to indicate the image has been saved to the library
+          } catch (error) {
+            console.error("Error adding image to the library: ", error);
+            // Handle the error, maybe show a user-friendly message
+          }
         } else if (imageResponse.status === 504) {
           toast.error("Image generation timed out.");
           setIsGeneratingImage(false);
@@ -114,47 +177,49 @@ const SideMenu = () => {
   };
 
   return (
-  <div className={`flex min-h-screen ${isModalOpen}`}>
+  <div className={`flex min-h-screen ${isModalOpen} ${logoutAnimation}`}>
       <Toaster />
       {/* Sidebar */}
       <div className="flex flex-col w-20 bg-[#ddddde] text-white">
-        <div className="flex flex-col p-4 mt-24">
+        <div className="flex flex-col p-0 mt-24">
           <button className="mb-4 text-sm">
-            <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center hover:bg-purple-700 transition duration-300">
+            <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center hover:bg-purple-700 transition duration-300 ml-5">
               <img
                 src="/assets/logo genia 1.png"
                 alt="Logo"
-                className="w-12 h-12 absolute left-[1.65rem] -mt-2"
+                className="w-12 h-12 absolute -mt-2 ml-3"
               />
             </div>
-            <p className="text-center text-black mt-1 -ml-0">Create</p>
+            <p className="text-center text-black mt-0 ml-0 font-semibold text-sm leading-relaxed max-w-xl">Create</p>
           </button>
           <button className="mb-4 text-sm text-center">
-            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE]">
+            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE] ml-5">
               <HeartIcon size={32} color="purple" />
             </div>
-            <p style={{ textAlign: "justify" }} className="text-black text-center mt-1 -ml-2">Favorites</p>
+            <p style={{ textAlign: "justify" }} className="text-center text-black mt-0 font-semibold text-sm leading-relaxed">Favorites</p>
           </button>
-          <button className="mb-4 text-sm text-center">
-            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE]">
-              <Folder size={32} color="purple" />
+          <button className="mb-4 text-sm text-center" onClick={goToLibrary}>
+            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE] ml-5">
+                <Folder size={32} color="purple" />
             </div>
-            <p className="text-center text-black mt-2 -ml-1">Library</p>
+            <p className="text-center text-black mt-0 mx-auto font-semibold text-sm leading-relaxed max-w-xl">Library</p>
           </button>
-          <button className="mb-4 text-sm text-center">
-            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE]">
-              <MessageCircle size={32} color="purple" />
-            </div>
-            <p className="text-center text-black mt-2 -ml-0">Ask gpt</p>
-          </button>
-          <button className="mb-4 text-sm text-center">
-            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE]">
-              {/* <MessageCircle size={32} color="purple" /> */}
-            </div>
-            {/* <p className="text-center mt-2 -ml-4">
-              Ask Gpt
-            </p> */}
-          </button>
+          <a href="https://genia-app.com/index.php/ask-ai/" target="_blank" rel="noopener noreferrer">
+            <button className="mb-4 text-sm text-center">
+              <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE] ml-5">
+                <MessageCircle size={32} color="purple" />
+              </div>
+                <p className="text-center text-black mt-0 ml-4 font-semibold text-sm leading-relaxed max-w-xl">Ask gpt</p>
+              </button>
+          </a>
+          <button className="mb-4 text-sm text-center" onClick={handleLoginLogoutClick}>
+        <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE] ml-5">
+          {/* Your existing icon and props */}
+        </div>
+        <p className="text-center text-black mt-0 mx-auto font-semibold text-sm leading-relaxed max-w-xl">
+          {isLoggedIn ? 'Logout' : 'Login'}
+        </p>
+      </button>
         </div>
       </div>
       {/* Expanded Area */}
