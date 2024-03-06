@@ -26,7 +26,14 @@
 
 .title-style {
   text-align: center;
-  margin: 1% ;
+  margin: 1%;
+  padding: 10px;
+  background-color: rgba(204, 153, 201, 0.3); /* A blend of purple and pink with transparency */
+  border-radius: 18px;
+  color: #333;
+  font-family: 'Arial', sans-serif;
+  font-size: 18px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .images-wrapper {
@@ -80,10 +87,17 @@
   }
   .title-style {
     font-weight: bold;
-    font-size: 20px;
-    text-align: left;
-    padding-right: 90px;
-    padding-bottom: 20px;
+    font-size: 16px;
+    text-align: center;
+    margin-right: 14%;
+    margin-bottom: 2%;
+    padding-bottom: 10px;
+    text-align: center;
+    background-color: rgba(204, 153, 201, 0.3); /* A blend of purple and pink with transparency */
+    border-radius: 18px;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 }
 
@@ -118,10 +132,17 @@
   }
   .title-style {
     font-weight: bold;
-    font-size: 20px;
+    font-size: 14px;
     text-align: center;
-    padding-right: 80px;
+    margin-right: 14%;
+    margin-bottom: 2%;
     padding-bottom: 10px;
+    text-align: center;
+    background-color: rgba(204, 153, 201, 0.3); /* A blend of purple and pink with transparency */
+    border-radius: 18px;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 }
 
@@ -157,10 +178,17 @@
   }
   .title-style {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
     text-align: center;
-    padding-right: 60px;
+    margin-right: 14%;
+    margin-bottom: 2%;
     padding-bottom: 10px;
+    text-align: center;
+    background-color: rgba(204, 153, 201, 0.3); /* A blend of purple and pink with transparency */
+    border-radius: 18px;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 }
 
@@ -195,10 +223,17 @@
   }
   .title-style {
     font-weight: bold;
-    font-size: 20px;
+    font-size: 14px;
     text-align: center;
-    padding-right: 60px;
+    margin-right: 14%;
+    margin-bottom: 2%;
     padding-bottom: 10px;
+    text-align: center;
+    background-color: rgba(204, 153, 201, 0.3); /* A blend of purple and pink with transparency */
+    border-radius: 18px;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 }
 @media (width: 1600px) {
@@ -230,10 +265,17 @@
   }
   .title-style {
     font-weight: bold;
-    font-size: 20px;
+    font-size: 26px;
     text-align: center;
-    padding-right: 60px;
+    margin-right: 4%;
+    margin-bottom: 6%;
     padding-bottom: 10px;
+    text-align: center;
+    background-color: rgba(204, 153, 201, 0.3); /* A blend of purple and pink with transparency */
+    border-radius: 18px;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 }
 
