@@ -1,14 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { db } from '../firebase'; // Adjust the import path as needed
+import { useNavigate } from 'react-router-dom';
+import { db } from '../firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { useAuth } from '../context/AuthContext'; // Adjust the import path as needed
-import ImageModal from './ImageModal'; // Component to be created for the modal
-import './LibraryPage.css'; // CSS file for styling
+import { useAuth } from '../context/AuthContext';
+import ImageModal from './ImageModal';
+import { Button, Grid, Typography, Card, CardActionArea, CardMedia } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+// Custom theme
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#e91e63', // Pink
+    },
+    secondary: {
+      main: '#ff4081', // Magenta
+    },
+  },
+});
 
 const LibraryPage = () => {
   const [images, setImages] = useState([]);
   const { currentUser } = useAuth();
   const [selectedImage, setSelectedImage] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (currentUser) {
@@ -26,16 +41,30 @@ const LibraryPage = () => {
   }, [currentUser]);
 
   return (
-    <div className="library-page">
-      <div className="image-grid">
-        {images.map((imageUrl, index) => (
-          <div key={index} className="image-item" onClick={() => setSelectedImage(imageUrl)}>
-            <img src={imageUrl} alt={`User upload ${index}`} />
-          </div>
-        ))}
+    <ThemeProvider theme={theme}>
+      <div className="library-page-wrapper">
+        <div className="library-page-header">
+          <Typography variant="h3" component="h1" gutterBottom color="primary" align="center">
+            My Library
+          </Typography>
+          <Button variant="contained" color="secondary" onClick={() => navigate('/')}>
+            Home
+          </Button>
+        </div>
+        <Grid container spacing={2} justifyContent="center">
+          {images.map((imageUrl, index) => (
+            <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
+              <Card>
+                <CardActionArea onClick={() => setSelectedImage(imageUrl)}>
+                  <CardMedia component="img" image={imageUrl} alt={`User upload ${index}`} />
+                </CardActionArea>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+        {selectedImage && <ImageModal imageUrl={selectedImage} onClose={() => setSelectedImage(null)} />}
       </div>
-      {selectedImage && <ImageModal imageUrl={selectedImage} onClose={() => setSelectedImage(null)} />}
-    </div>
+    </ThemeProvider>
   );
 };
 
