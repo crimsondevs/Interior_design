@@ -126,7 +126,7 @@ const SideMenu: React.FC = ({ }) => {
     }
   
     setIsGeneratingImage(true);
-    axios.post("https://58bzttxwyfejl6-4996.proxy.runpod.net/update-prompt", imageGallery)
+    axios.post("https://5t5b1kzen5vqxu-4996.proxy.runpod.net/update-prompt", imageGallery)
       .then(response => {
         const requestId = response.data.request_id;
         pollForImage(requestId);
@@ -139,7 +139,7 @@ const SideMenu: React.FC = ({ }) => {
 
   // Poll for image
   const pollForImage = (requestId) => {
-    axios.get(`https://58bzttxwyfejl6-4996.proxy.runpod.net/get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
+    axios.get(`https://5t5b1kzen5vqxu-4996.proxy.runpod.net//get-uploaded-image?request_id=${requestId}`, { responseType: "blob" })
       .then(async imageResponse => { // Mark this callback as async to use await inside
         if (imageResponse.status === 200) {
           const imageUrl = URL.createObjectURL(imageResponse.data);
