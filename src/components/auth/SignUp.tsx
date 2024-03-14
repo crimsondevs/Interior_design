@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { Button, TextField, Typography, Container, Box, Alert, Link, IconButton, } from '@mui/material'; // Ensure Link is imported for navigation
 import { useNavigate } from 'react-router-dom';
 import { pink, purple } from '@mui/material/colors';
 import CloseIcon from '@mui/icons-material/Close'; // Import CloseIcon
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../../firebase'; // Adjust the import path as needed
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -26,16 +28,30 @@ const SignUp = () => {
     }
     createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      // This line logs the entire userCredential object to the console.
-      console.log(userCredential);
-        const user = userCredential.user;
-        console.log("User created successfully with UID:", user.uid);
-        navigate('/login');
-      })
-      .catch((error) => {
-        console.log(error);
-        setError(error.message);
+      // Update the user's profile with their name
+      updateProfile(userCredential.user, {
+        displayName: name
+      }).then(() => {
+        console.log("User's profile updated with name:", name);
+        // Store additional information in Firestore
+        const userRef = doc(db, 'users', userCredential.user.uid);
+        setDoc(userRef, {
+          name: name,
+          contact: contact
+        }).then(() => {
+          console.log('Additional user information stored in Firestore');
+          navigate('/login');
+        }).catch((error) => {
+          console.error('Error storing additional information in Firestore:', error.message);
+        });
+      }).catch((error) => {
+        console.error('Error updating user profile:', error.message);
       });
+    })
+    .catch((error) => {
+      console.error(error);
+      setError(error.message);
+    });
   };
 
   return (

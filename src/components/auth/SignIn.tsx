@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth"; // Import sendPasswordResetEmail
 import { auth } from "../../firebase";
 import {
   Button,
@@ -8,10 +8,11 @@ import {
   Container,
   Box,
   Alert,
-  IconButton, // Import IconButton
+  IconButton,
+  Link as MuiLink, // MUI's Link renamed to avoid conflict with React Router's Link
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import CloseIcon from '@mui/icons-material/Close'; // Import CloseIcon
+import CloseIcon from '@mui/icons-material/Close';
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -32,27 +33,42 @@ const SignIn = () => {
       });
   };
 
+  const handleForgotPassword = () => {
+    if (!email) {
+      setError("Please enter your email address to reset your password.");
+      return;
+    }
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        alert("Password reset email sent! Check your inbox.");
+      })
+      .catch((error) => {
+        console.log(error);
+        setError(error.message);
+      });
+  };
+
   return (
     <div style={{
-        position: 'relative',
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        overflow: 'hidden',
-      }}>
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          backgroundImage: 'url("/assets/BG.png")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'blur(8px)',
-          zIndex: -1,
-        }}></div>
+      position: 'relative',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      overflow: 'hidden',
+    }}>
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundImage: 'url("/assets/BG.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        filter: 'blur(8px)',
+        zIndex: -1,
+      }}></div>
       <Container maxWidth="sm">
         <Box
           sx={{
@@ -65,7 +81,7 @@ const SignIn = () => {
             boxShadow: 1,
             fontWeight: 'bold',
             p: 4,
-            position: 'relative', // Added for positioning the close button
+            position: 'relative',
           }}
         >
           <IconButton
@@ -88,7 +104,7 @@ const SignIn = () => {
               {error}
             </Alert>
           )}
-          <Box component="form" onSubmit={signIn} sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={signIn} >
             <TextField
               margin="normal"
               required
@@ -117,6 +133,14 @@ const SignIn = () => {
               variant="outlined"
               color="secondary"
             />
+            <MuiLink
+              component="button"
+              variant="body2"
+              onClick={handleForgotPassword}
+              sx={{ mt: 2, mb: 2, display: 'block', textAlign: 'right', color: 'secondary.main' }}
+            >
+              Forgot Password?
+            </MuiLink>
             <Button
               type="submit"
               fullWidth
