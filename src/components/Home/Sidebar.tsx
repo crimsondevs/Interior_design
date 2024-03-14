@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   Folder,
-  HeartIcon,
+  UserCircle,
   MessageCircle,
   Upload,
   Minus,
@@ -12,8 +12,7 @@ import { useAtom } from "jotai";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import './SideMenu.css'; // Assume styles are defined in this CSS file
-import './ModalStyles.css';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import { auth } from "../../firebase"; // Import your Firebase auth instance
 import { useAuth } from "./../../context/AuthContext"; // Adjust the import path as needed
 import { db } from "../../firebase"; // Adjust the import path as needed
@@ -28,8 +27,6 @@ const SideMenu: React.FC = ({ }) => {
   const [prompt, setPrompt] = useState<string>("");
   const [negativePrompt, setNegativePrompt] = useState<string>("");
   const [isGeneratingImage, setIsGeneratingImage] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [modalImage, setModalImage] = useState<string>("");
 
   const goToLibrary = () => {
     if (!isLoggedIn) {
@@ -37,42 +34,47 @@ const SideMenu: React.FC = ({ }) => {
         icon: '🔐',
       });
     }
-      else{
-        navigate('/library'); // Use the path to your library page
-      }
+    else {
+      navigate('/library'); // Use the path to your library page
+    }
   };
 
-  
+  const goToDashboard = () => {
+    navigate('/UserDashboard'); // Use the path to your library page
+
+  };
+
+
 
   const [logoutAnimation, setLogoutAnimation] = useState("");
   const { currentUser, logout } = useAuth(); // Assuming your useAuth hook provides a logout function
-  const isLoggedIn = !!currentUser; 
+  const isLoggedIn = !!currentUser;
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
 
-  
-    const handleLoginLogoutClick = async () => {
-      if (currentUser) {
-        setLogoutAnimation("fade-out-animation"); // Trigger the animation
-      } else {
-        navigate('/login'); // Directly navigate to login if not logged in
-      }
-    };
 
-    useEffect(() => {
-      if (logoutAnimation) {
-        const timer = setTimeout(async () => {
-          try {
-            await logout();
-            navigate('/'); // Navigate after logout
-          } catch (error) {
-            console.error("Failed to logout:", error);
-          }
-        }, 500); // Set timeout duration equal to animation duration
-        return () => clearTimeout(timer);
-      }
-    }, [logoutAnimation, logout, navigate]);
+  const handleLoginLogoutClick = async () => {
+    if (currentUser) {
+      setLogoutAnimation("fade-out-animation"); // Trigger the animation
+    } else {
+      navigate('/login'); // Directly navigate to login if not logged in
+    }
+  };
+
+  useEffect(() => {
+    if (logoutAnimation) {
+      const timer = setTimeout(async () => {
+        try {
+          await logout();
+          navigate('/'); // Navigate after logout
+        } catch (error) {
+          console.error("Failed to logout:", error);
+        }
+      }, 500); // Set timeout duration equal to animation duration
+      return () => clearTimeout(timer);
+    }
+  }, [logoutAnimation, logout, navigate]);
 
   // Handle prompt changes
   const onPromptChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -87,6 +89,7 @@ const SideMenu: React.FC = ({ }) => {
     setNegativePrompt(negativePrompt);
     setImageGallery((prev) => ({ ...prev, negative_prompt: negativePrompt }));
   };
+
 
   // Handle image upload
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,7 +116,7 @@ const SideMenu: React.FC = ({ }) => {
       });
       return;
     }
-  
+
     if (
       !imageGallery.Category ||
       !imageGallery.designStyle ||
@@ -124,7 +127,7 @@ const SideMenu: React.FC = ({ }) => {
       toast.error("Please select all options!");
       return;
     }
-  
+
     setIsGeneratingImage(true);
     axios.post("https://5t5b1kzen5vqxu-4996.proxy.runpod.net/update-prompt", imageGallery)
       .then(response => {
@@ -144,9 +147,8 @@ const SideMenu: React.FC = ({ }) => {
         if (imageResponse.status === 200) {
           const imageUrl = URL.createObjectURL(imageResponse.data);
           setIsGeneratingImage(false);
-          setModalImage(imageUrl);
-          setIsModalOpen(true); // Open the modal with the image
-  
+          handleImageDownload(imageUrl);
+
           // Now, save the image URL to Firestore
           try {
             await addDoc(collection(db, "userImages"), {
@@ -171,67 +173,15 @@ const SideMenu: React.FC = ({ }) => {
   };
 
   // Download image
-  const handleImageDownload = () => {
-    const link = document.createElement('a');
-    link.href = modalImage;
-    link.download = 'generated_image.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleImageDownload = (imageUrl: string) => {
+    // Navigate to the "generate" page with image URL as state
+    navigate('/generate', { state: { imageUrl } });
   };
 
-  // Close modal
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
 
   return (
-  <div className={`flex min-h-screen ${isModalOpen} ${logoutAnimation}`}>
+    <div className={`flex min-h-screen ${logoutAnimation}`}>
       <Toaster />
-      {/* Sidebar */}
-      <div className="flex flex-col w-20 bg-[#ddddde] text-white">
-        <div className="flex flex-col p-0 mt-24">
-          <button className="mb-4 text-sm">
-            <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center hover:bg-purple-700 transition duration-300 ml-5">
-              <img
-                src="/assets/logo genia 1.png"
-                alt="Logo"
-                className="w-12 h-12 absolute -mt-2 ml-3"
-              />
-            </div>
-            <p className="text-center text-black mt-0 ml-0 font-semibold text-sm leading-relaxed max-w-xl">Create</p>
-          </button>
-          <button className="mb-4 text-sm text-center">
-            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE] ml-5">
-              <HeartIcon size={32} color="purple" />
-            </div>
-            <p style={{ textAlign: "justify" }} className="text-center text-black mt-0 font-semibold text-sm leading-relaxed">Favorites</p>
-          </button>
-          <button className="mb-4 text-sm text-center" onClick={goToLibrary}>
-            <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE] ml-5">
-                <Folder size={32} color="purple" />
-            </div>
-            <p className="text-center text-black mt-0 mx-auto font-semibold text-sm leading-relaxed max-w-xl">Library</p>
-          </button>
-          <a href="https://genia-app.com/index.php/ask-ai/" target="_blank" rel="noopener noreferrer">
-            <button className="mb-4 text-sm text-center">
-              <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE] ml-5">
-                <MessageCircle size={32} color="purple" />
-              </div>
-                <p className="text-center text-black mt-0 ml-4 font-semibold text-sm leading-relaxed max-w-xl">Ask gpt</p>
-              </button>
-          </a>
-          <button className="mb-4 text-sm text-center" onClick={handleLoginLogoutClick}>
-        <div className="border-2 border-purple-500 p-2 rounded-full flex items-center justify-center w-10 h-10 bg-[#BEBEBE] ml-5">
-          {/* Your existing icon and props */}
-        </div>
-        <p className="text-center text-black mt-0 mx-auto font-semibold text-sm leading-relaxed max-w-xl">
-          {isLoggedIn ? 'Logout' : 'Login'}
-        </p>
-      </button>
-        </div>
-      </div>
-      {/* Expanded Area */}
       <div className="flex flex-col items-center justify-start w-72 bg-[#2C2F48]/10 text-white p-4">
         {/* Genia App Icon */}
         <img
@@ -247,7 +197,7 @@ const SideMenu: React.FC = ({ }) => {
         {isGeneratingImage && (
           <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-gray-700 bg-opacity-50 z-50">
             <div className="text-white text-3xl font-bold p-4 bg-gradient-to-r from-purple-500 to-pink-500 bg-opacity-60 rounded-md shadow-lg">
-               Generating image, please wait...
+              Generating image, please wait...
             </div>
           </div>
         )}
@@ -308,35 +258,14 @@ const SideMenu: React.FC = ({ }) => {
         {/* Add the rest of your components here, as per your existing code */}
         <button onClick={handleSubmit}>
           <div className="flex justify-center items-center">
-          <img
-            alt=""
-            src="/assets/generate icone.webp"
-            className="bottom-[100px] left-[180px] w-28 h-28"
-          />
-            </div>
+            <img
+              alt=""
+              src="/assets/generate icone.webp"
+              className="bottom-[100px] left-[180px] w-28 h-28"
+            />
+          </div>
         </button>
       </div>
-      {isModalOpen && (
-        <div className="backdrop">
-  <div className="modal-container">
-    <div className="modal-content">
-      <div className="modal-image-wrapper">
-        <img alt="Generated" src={modalImage} className="modal-image" />
-        <div className="white-bar">
-          <button onClick={handleImageDownload} className="icon-button">
-            <img alt="Download" src="/assets/download-icon.svg" className="button-icon" />
-          </button>
-          <span>Download</span>
-        </div>
-      </div>
-      <button onClick={closeModal} className="close-button">
-        <img alt="Close" src="/assets/close-icon.svg" className="button-icon" />
-      </button>
-    </div>
-  </div>
-</div>
-)}
-
     </div>
   );
 };
