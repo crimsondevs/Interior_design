@@ -20,12 +20,6 @@ import { collection, addDoc } from "firebase/firestore";
 
 
 const SideIcons = ({ }) => {
-    const [image, setImage] = useState<string | null>(null);
-    const [imageGallery, setImageGallery] = useAtom(imageGalleryAtom);
-    const [prompt, setPrompt] = useState<string>("");
-    const [negativePrompt, setNegativePrompt] = useState<string>("");
-    const [isGeneratingImage, setIsGeneratingImage] = useState<boolean>(false);
-
     const goToLibrary = () => {
         if (!isLoggedIn) {
             toast.error("Please log in to see your Library", {
@@ -46,8 +40,6 @@ const SideIcons = ({ }) => {
         navigate('/'); // Use the path to your library page
 
     };
-
-
 
     const [logoutAnimation, setLogoutAnimation] = useState("");
     const { currentUser, logout } = useAuth(); // Assuming your useAuth hook provides a logout function
